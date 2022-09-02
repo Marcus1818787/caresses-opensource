@@ -22,7 +22,7 @@ Affiliation: Robotics Laboratory, Japan Advanced Institute of Science and Techno
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-import Queue
+import queue
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
@@ -49,7 +49,7 @@ class SVAModel(object):
         self.load_model()
 
         self.weights = np.array([0.033, 0.033, 0.033, 0.05, 0.05, 0.1, 0.1, 0.2, 0.2, 0.2])
-        self.volumes = Queue.Queue()
+        self.volumes = queue.Queue()
         for mic_energy in buffer_mic_energy:
             volume = self.predict_volume(mic_energy)
             self.volumes.put(volume)

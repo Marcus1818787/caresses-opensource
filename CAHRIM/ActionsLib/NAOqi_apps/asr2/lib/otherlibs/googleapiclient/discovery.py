@@ -16,7 +16,7 @@
 
 A client library for Google's discovery based APIs.
 """
-from __future__ import absolute_import
+
 
 import sys
 sys.path.append("/data/home/nao/.local/share/PackageManager/apps/asr2/lib/otherlibs/")
@@ -402,7 +402,7 @@ def _cast(value, schema_type):
     A string representation of 'value' based on the schema_type.
   """
   if schema_type == 'string':
-    if type(value) == type('') or type(value) == type(u''):
+    if type(value) == type('') or type(value) == type(''):
       return value
     else:
       return str(value)
@@ -413,7 +413,7 @@ def _cast(value, schema_type):
   elif schema_type == 'boolean':
     return str(bool(value)).lower()
   else:
-    if type(value) == type('') or type(value) == type(u''):
+    if type(value) == type('') or type(value) == type(''):
       return value
     else:
       return str(value)

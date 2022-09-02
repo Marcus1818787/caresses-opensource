@@ -123,10 +123,10 @@ class GenerateRobotGesture(object):
             generated_gesture = decode_motion_format(generated_gesture)[0]
             generated_gesture = filter_data(generated_gesture, window_size=7)
             generated_gesture = processing_data(generated_gesture[5:150])
-            print(np.shape(generated_gesture))
+            print((np.shape(generated_gesture)))
             self.sendToPepper(generated_gesture, self.fractionMaxSpeed, self.time_delay)
             self.home(fractionMaxSpeed_home=0.1, time_home=0.3)
-            print "> ",
+            print("> ", end=' ')
             sys.stdout.flush()
             self.input_text = sys.stdin.readline()
                 
@@ -179,11 +179,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     args = parser.parse_args()

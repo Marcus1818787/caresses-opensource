@@ -252,7 +252,7 @@ class AbstractSimpleAsn1Item(Asn1ItemBase):
             self.__class__.__name__, self.isValue and 'value' or 'schema', id(self)
         )
 
-        for attr, value in self.readOnly.items():
+        for attr, value in list(self.readOnly.items()):
             if value:
                 representation += ' %s %s' % (attr, value)
 
@@ -411,7 +411,7 @@ class AbstractSimpleAsn1Item(Asn1ItemBase):
         if explicitTag is not None:
             initializers['tagSet'] = self.tagSet.tagExplicitly(explicitTag)
 
-        for arg, option in kwargs.items():
+        for arg, option in list(kwargs.items()):
             initializers[arg] += option
 
         return self.__class__(value, **initializers)
@@ -474,7 +474,7 @@ class AbstractConstructedAsn1Item(Asn1ItemBase):
             self.__class__.__name__, self.isValue and 'value' or 'schema', id(self)
         )
 
-        for attr, value in self.readOnly.items():
+        for attr, value in list(self.readOnly.items()):
             if value is not noValue:
                 representation += ' %s=%r' % (attr, value)
 
@@ -605,7 +605,7 @@ class AbstractConstructedAsn1Item(Asn1ItemBase):
         if explicitTag is not None:
             initializers['tagSet'] = self.tagSet.tagExplicitly(explicitTag)
 
-        for arg, option in kwargs.items():
+        for arg, option in list(kwargs.items()):
             initializers[arg] += option
 
         clone = self.__class__(**initializers)

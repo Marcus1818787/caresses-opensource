@@ -31,11 +31,11 @@ from matplotlib.figure import Figure
 
 import time
 
-import tkSimpleDialog
-from Tkinter import *
-from ttk import Frame, Button, Label, Checkbutton, Entry
+import tkinter.simpledialog
+from tkinter import *
+from tkinter.ttk import Frame, Button, Label, Checkbutton, Entry
 
-from graphnavigation import *
+from .graphnavigation import *
 
 DEBUG = False
 
@@ -260,7 +260,7 @@ class GraphDrawer(Frame):
                     n.addDrawing(event.inaxes, event.canvas, drawNow=True)
                     ## A new node implies unsaved changes
                     self.file.saved = False
-                    if DEBUG: print n
+                    if DEBUG: print(n)
 
         elif self.mode.getMode() == Mode.EDGE:
             pass
@@ -286,7 +286,7 @@ class GraphDrawer(Frame):
                     e.addDrawing(event.artist.axes, event.canvas, drawNow=True)
                     Temp.reset()
                     self.mode.setStatusbarLabel(10)
-                    if DEBUG: print e
+                    if DEBUG: print(e)
 
         ## Delete selected node on wheel-click
         elif event.mouseevent.button == 2:
@@ -352,7 +352,7 @@ class GraphDrawer(Frame):
                 pass
             elif self.mode.getMode() == Mode.OBST:
                 Temp.obstacle.finalizeDrawing(event.xdata, event.ydata)
-                if DEBUG: print Temp.obstacle
+                if DEBUG: print(Temp.obstacle)
                 Temp.reset()
                 ## A new obstacle implies unsaved changes
                 self.file.saved = False
@@ -423,7 +423,7 @@ class GraphDrawer(Frame):
         label = element.getLabel()
         id = element.getID()
         label_field = label if not label == id else ""
-        new_label = tkSimpleDialog.askstring("Assign Label", "Enter the label", initialvalue=label_field)
+        new_label = tkinter.simpledialog.askstring("Assign Label", "Enter the label", initialvalue=label_field)
 
         self.updateLabel(element, new_label)
 
@@ -486,7 +486,7 @@ class GraphDrawer(Frame):
             self.file.saved = False
 
 
-class NodeInfoDialog(tkSimpleDialog.Dialog):
+class NodeInfoDialog(tkinter.simpledialog.Dialog):
 
     _label_var = None
     _theta_var = None

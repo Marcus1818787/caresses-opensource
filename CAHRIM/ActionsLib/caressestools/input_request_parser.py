@@ -55,10 +55,10 @@ class InputRequestParser:
 
         refinedInputs = dict()
 
-        for key, value in inputs.items():
+        for key, value in list(inputs.items()):
             refinedInputs[key] = dict()
 
-            for subkey, subvalue in value.items():
+            for subkey, subvalue in list(value.items()):
                 if isinstance(subvalue, list):
                     refinedInputs[key][subkey] = [element for element in subvalue]
 

@@ -55,7 +55,7 @@ def cleanAllWavInOneDirectory( strPath, nCleanMode = 1, bOverwriteSourceFile = F
         #~ w.ensureSilence( rTimeAtBegin = 0.2, rTimeAtEnd = 2., bRemoveIfTooMuch=True, rSilenceTresholdPercent=0.8 )
         #~ w.normalise()
         #~ w.normalise()
-        print( "time taken: %5.3fs" % (time.time() - timeBegin ) )
+        print(( "time taken: %5.3fs" % (time.time() - timeBegin ) ))
         #w.data=w.data[::-1]
         w.write( "c:\\temp\\output.wav" )
         substract( "c:\\temp\\01_Patients_annonce.wav", "c:\\temp\\output.wav", "c:\\temp\\output2.wav" )
@@ -76,7 +76,7 @@ def cleanAllWavInOneDirectory( strPath, nCleanMode = 1, bOverwriteSourceFile = F
             # we normalise before so the threshold is higher !
             w.ensureSilence( rTimeAtBegin = 0.0, rTimeAtEnd = 0., bRemoveIfTooMuch=True, rSilenceTresholdPercent=1.7 ) 
         
-        print( "time taken: %5.3fs" % (time.time() - timeBegin ) )
+        print(( "time taken: %5.3fs" % (time.time() - timeBegin ) ))
         if( bOverwriteSourceFile ):
             strFilenameOut = strFilename
         else:
@@ -103,14 +103,14 @@ def convertWavFile( strSrc, strDst, nNewSamplingFrequency = -1, nNewNbrChannel =
     bRet = wavSrc.load( strSrc, bUnpackData = True )
     #~ print( "DBG: abcdk.sound.convertWavFile: src:" + str(wavSrc) )
     if( not bRet ):
-        print( "ERR: abcdk.sound.convertWavFile: source file '%s' not found" % ( strSrc ) )
+        print(( "ERR: abcdk.sound.convertWavFile: source file '%s' not found" % ( strSrc ) ))
         return False
     if( nNewSamplingFrequency == -1 ):
         nNewSamplingFrequency = wavSrc.nSamplingRate
     if( nNewNbrChannel == -1 ):
         nNewNbrChannel = wavSrc.nNbrChannel
     nNewBitPerSample = wavSrc.nNbrBitsPerSample
-    print( "INF: abcdk.sound.convertWavFile: '%s' [%dHz, %d channel(s), %d bits] => '%s' [%dHz, %d channel(s), %d bits]" % (strSrc, wavSrc.nSamplingRate, wavSrc.nNbrChannel, wavSrc.nNbrBitsPerSample, strDst, nNewSamplingFrequency, nNewNbrChannel, nNewBitPerSample) )
+    print(( "INF: abcdk.sound.convertWavFile: '%s' [%dHz, %d channel(s), %d bits] => '%s' [%dHz, %d channel(s), %d bits]" % (strSrc, wavSrc.nSamplingRate, wavSrc.nNbrChannel, wavSrc.nNbrBitsPerSample, strDst, nNewSamplingFrequency, nNewNbrChannel, nNewBitPerSample) ))
     wavDst = Wav()
     wavDst.new( nSamplingRate = nNewSamplingFrequency, nNbrChannel = nNewNbrChannel, nNbrBitsPerSample =  nNewBitPerSample )
     nNumSample = 0
@@ -175,7 +175,7 @@ def convertWavFile( strSrc, strDst, nNewSamplingFrequency = -1, nNewNbrChannel =
                     temp[1]  = ( aSample[2]+aSample[-1] ) / 2 # [-1] => C3 or C4 depending on the channel number
                     aSample = temp
                 else:
-                    print( "ERR: abcdk.sound.convertWavFile: while converting file '%s': unhandled channel conversion (%d=>%d)" % ( strSrc,  nNewNbrChannel, nNewNbrChannel) )
+                    print(( "ERR: abcdk.sound.convertWavFile: while converting file '%s': unhandled channel conversion (%d=>%d)" % ( strSrc,  nNewNbrChannel, nNewNbrChannel) ))
                     return False
                     
         #~ wavDst.addData( aSample ) # not optimal: a lot of jumps to addData there... # for a 19sec long sound, gain was from 10s to 2.8s by removing this call !
@@ -189,7 +189,7 @@ def convertWavFile( strSrc, strDst, nNewSamplingFrequency = -1, nNewNbrChannel =
     
     wavDst.write( strDst, bAsRawFile = bAsRawFile )
     #~ print( "DBG: abcdk.sound.convertWavFile: dst:" + str(wavDst) )
-    print( "INF: abcdk.sound.convertWavFile: done in %.2fs" % ( time.time() - timeBegin ) )
+    print(( "INF: abcdk.sound.convertWavFile: done in %.2fs" % ( time.time() - timeBegin ) ))
     return True
 # convertWavFile - end
 
@@ -202,11 +202,11 @@ def correctHeader( strWavFile ):
     bRet = wav.load( strWavFile, bUnpackData = True )
     #~ print( "DBG: abcdk.sound.convertWavFile: src:" + str(wavSrc) )
     if( not bRet ):
-        print( "ERR: abcdk.sound.correctHeader: source file '%s' not found" % ( strWavFile ) )
+        print(( "ERR: abcdk.sound.correctHeader: source file '%s' not found" % ( strWavFile ) ))
         return False
     wav.write(strWavFile)
     rDuration = time.time() - timeBegin
-    print( "INF: correctHeader: rewriting wav '%s' (in %5.2fs) [OK]" % (strWavFile, rDuration) )
+    print(( "INF: correctHeader: rewriting wav '%s' (in %5.2fs) [OK]" % (strWavFile, rDuration) ))
 # correctHeader - end
 
 def correctHeaderInFolder( strPath ):
@@ -238,9 +238,9 @@ def getLength( strFilename ):
     "return the length in sec"
     wav = Wav()
     if( not wav.load( strFilename, bUnpackData = False ) ):
-        print( "ERR: sound.getLength: can't load wav '%s'" % strFilename )
+        print(( "ERR: sound.getLength: can't load wav '%s'" % strFilename ))
         return 0
-    print( "INF: sound.getLength: wav loaded: %s" % str( wav ) )
+    print(( "INF: sound.getLength: wav loaded: %s" % str( wav ) ))
     return wav.rDuration
 # getLength - end
 
@@ -252,7 +252,7 @@ def repair( wavFile, bQuiet = False ):
     wav = Wav( wavFile, bQuiet  = bQuiet )
     if( not wav.bHeaderCorrected ):
         return False
-    print( "INF: rewriting '%s' with correct header" % wavFile )
+    print(( "INF: rewriting '%s' with correct header" % wavFile ))
     wav.write( wavFile )
     return True
 # repair - end
@@ -288,7 +288,7 @@ def ensureSampleRate( strFilename, nNewSampleRate ):
     if( nNewSampleRate > wav.nSamplingRate ):
         rMultiple = float(nNewSampleRate) / wav.nSamplingRate
         if( rMultiple != int(rMultiple) ):
-            print( "ERR: ensureSampleRate: can't change sample rate if not multiple or plain divisor file: '%s' (%s !=> %s)" % (strFilename, wav.nSamplingRate, nNewSampleRate) )
+            print(( "ERR: ensureSampleRate: can't change sample rate if not multiple or plain divisor file: '%s' (%s !=> %s)" % (strFilename, wav.nSamplingRate, nNewSampleRate) ))
             return -1
         nMultiple = int(rMultiple)
         wavNew.data = wav.data.repeat( nMultiple)
@@ -308,10 +308,10 @@ def convertToOneChannel( strFileIn, strFileOut, nIdxChannelToTake = 0 ):
     """
     wav = Wav()
     if not wav.load( strFileIn ):
-        print( "ERR: can't open '%s'" % strFileIn )
+        print(( "ERR: can't open '%s'" % strFileIn ))
         return -1
     if not wav.extractOneChannelAndSaveToFile( strFileOut, nNumChannel = nIdxChannelToTake ):
-        print( "ERR: can't write to '%s'" % strFileOut )
+        print(( "ERR: can't write to '%s'" % strFileOut ))
         return -2
     return 1
 # convertToOneChannel - end

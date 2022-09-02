@@ -28,7 +28,7 @@ import logging
 import sys
 import math
 
-from SpeechVolumeAdaptation.sva_model import SVAModel
+from .SpeechVolumeAdaptation.sva_model import SVAModel
 
 logger = logging.getLogger("CAHRIM.SpeechVolumeEstimator")
 

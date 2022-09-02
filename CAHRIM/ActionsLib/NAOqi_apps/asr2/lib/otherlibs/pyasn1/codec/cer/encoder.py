@@ -181,7 +181,7 @@ class SetOfEncoder(encoder.SequenceOfEncoder):
         # sort by serialised and padded components
         if len(components) > 1:
             zero = str2octs('\x00')
-            maxLen = max(map(len, components))
+            maxLen = max(list(map(len, components)))
             paddedComponents = [
                 (x.ljust(maxLen, zero), x) for x in components
                 ]

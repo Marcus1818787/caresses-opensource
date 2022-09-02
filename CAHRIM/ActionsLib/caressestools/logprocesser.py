@@ -1,4 +1,4 @@
-import speech as sp
+from . import speech as sp
 language="english"
 conf = sp.Speech("speech_conf.json", language, writedebug=False)
 KEYWORDS = "KEYWORDS"

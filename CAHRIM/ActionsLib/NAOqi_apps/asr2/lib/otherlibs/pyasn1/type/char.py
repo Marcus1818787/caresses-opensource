@@ -60,11 +60,11 @@ class AbstractCharacterString(univ.OctetString):
                 )
 
         def __unicode__(self):
-            return unicode(self._value)
+            return str(self._value)
 
         def prettyIn(self, value):
             try:
-                if isinstance(value, unicode):
+                if isinstance(value, str):
                     return value
                 elif isinstance(value, str):
                     return value.decode(self.encoding)
@@ -73,7 +73,7 @@ class AbstractCharacterString(univ.OctetString):
                 elif isinstance(value, univ.OctetString):
                     return value.asOctets().decode(self.encoding)
                 else:
-                    return unicode(value)
+                    return str(value)
 
             except (UnicodeDecodeError, LookupError):
                 raise error.PyAsn1Error(

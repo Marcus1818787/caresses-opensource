@@ -24,8 +24,8 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 
 import json
 
-from ActionsLib.caressestools import caressestools
-from ActionsLib.caressestools import speech
+from .ActionsLib.caressestools import caressestools
+from .ActionsLib.caressestools import speech
 
 def main(session, language, session_number, robot):
 
@@ -50,14 +50,14 @@ def main(session, language, session_number, robot):
     try:
         line = sentences[str(session_number)][robot][language].encode('utf-8')
     except Exception as e:
-        print e
-        print "Cannot retrieve any sentence."
+        print(e)
+        print("Cannot retrieve any sentence.")
         sys.exit()
 
     if not line == "":
         sp.say(line, speech.TAGS[1])
     else:
-        print "ERROR: No sentence for the '%s' robot at the end of session %d in the %s language!" % (robot, session_number, language)
+        print("ERROR: No sentence for the '%s' robot at the end of session %d in the %s language!" % (robot, session_number, language))
 
 
 if __name__ == "__main__":
@@ -79,11 +79,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     assert args.group in ["experimental", "control"], "'group' parameter can either be 'experimental' or 'control'"

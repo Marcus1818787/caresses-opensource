@@ -39,7 +39,7 @@ if __name__ == "__main__":
     try:
         session.connect("tcp://" + args.ip + ":" + str(args.port))
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
-               "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
+               "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
     main(session, args.name)

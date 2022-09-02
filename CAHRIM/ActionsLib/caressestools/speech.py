@@ -31,7 +31,7 @@ import string
 import time
 import functools
 import threading
-import Queue
+import queue
 import socket
 import speech_recognition as sr
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -40,11 +40,11 @@ from nltk.stem import PorterStemmer
 from random import randint
 from colorama import Fore, init, deinit
 
-import timedateparser
-from timedateparser import TimeDateParser
-from date_time_selector import DateTimeSelector
-from caressestools import Settings, setAutonomousAbilities, getAutonomousAbilities
-from custom_number import CustomNumber
+from . import timedateparser
+from .timedateparser import TimeDateParser
+from .date_time_selector import DateTimeSelector
+from .caressestools import Settings, setAutonomousAbilities, getAutonomousAbilities
+from .custom_number import CustomNumber
 
 import CahrimThreads.socket_handlers
 
@@ -182,7 +182,7 @@ class Speech():
                 self.loadScriptFromFile(script)
             else:
                 t = type(script)
-                raise TypeError, "Expecting <type 'dict'> or <type 'str'>, got %s instead." % t
+                raise TypeError("Expecting <type 'dict'> or <type 'str'>, got %s instead." % t)
 
             self.setLanguage(lang.lower())
 
@@ -378,7 +378,7 @@ class Speech():
         else:
             conf = os.path.join(os.path.dirname(__file__), filename)
             if not os.path.isfile(conf):
-                raise Exception, "File cannot be found: %s" % filename
+                raise Exception("File cannot be found: %s" % filename)
         with open(conf) as f:
             self.script = json.load(f)
         self._supported_languages = []
@@ -471,7 +471,7 @@ class Speech():
         Get the user input from the keyboard.
         @return (unicode) User input
         '''
-        return raw_input(Fore.CYAN + "USER > ").decode(sys.stdin.encoding)
+        return input(Fore.CYAN + "USER > ").decode(sys.stdin.encoding)
 
     def getInputFromMic(self):
         '''!
@@ -570,7 +570,7 @@ class Speech():
 
             toret = CahrimThreads.socket_handlers.InputMsgHandler.getSmartphone()
             CahrimThreads.socket_handlers.InputMsgHandler.resetSmartphone()
-            if toret is not None and toret.lower() in map(str.lower,options_str) and toret is not "":
+            if toret is not None and toret.lower() in list(map(str.lower,options_str)) and toret is not "":
                 self.sMemory.insertData("WordRecognized", ["<...> "+toret+" <...>", 1])
             elif toret is not None:
                 connected = False
@@ -759,12 +759,12 @@ class Speech():
                     self.userSaid(user_input)
 
                 for k in self.KEYWORD_EXIT:
-                    if unicode(k.lower(),"utf-8") in user_input.lower():
+                    if str(k.lower(),"utf-8") in user_input.lower():
                         self.stopInteraction()
 
                 must_repeat=False
                 for k in self.KEYWORD_REPEAT:
-                    if unicode(k.lower(),"utf-8") in user_input.lower():
+                    if str(k.lower(),"utf-8") in user_input.lower():
                         must_repeat=True
                         self.sAsr.stopReco()
                         self.say(line, tag)
@@ -818,7 +818,7 @@ class Speech():
 
         log1.info("[%s] " % tag + actor + " > " + line)
         try:
-            print(color + actor + " > " + line.encode("utf-8"))
+            print((color + actor + " > " + line.encode("utf-8")))
         except:
             pass
 
@@ -883,11 +883,11 @@ class Speech():
         @param group (str) Field of the chosen <topic> from which the sentence should be selected (default 'other')
         '''
         line = self.script[topic][group][str(sentence)][self._lang].encode('utf-8')
-        line = unicode(line,"utf-8")
+        line = str(line,"utf-8")
 
         if param is not None:
 
-            for key in param.keys():
+            for key in list(param.keys()):
                 line = line.replace(key, param[key])
 
         self.say(line, tag)
@@ -921,7 +921,7 @@ class Speech():
         '''
 
         try:
-            options = [unicode(a, "utf-8") for a in options]
+            options = [str(a, "utf-8") for a in options]
         except:
             pass
 
@@ -985,7 +985,7 @@ class Speech():
                 else:
                     line = self.script[topic][ASK_PARAMETERS][sent][self._lang].encode('utf-8')
 
-                line = unicode(line,"utf-8")
+                line = str(line,"utf-8")
 
                 if num_options >= 1:
                     o1 = options[0]
@@ -1001,7 +1001,7 @@ class Speech():
                 options = self.addSuggestionsToOptions(options, excludeSomeSuggestions)
                 if useChoiceManagerFromStart:
                     if self._pepper_is_active:
-                        import multipage_choice_manager as mcm
+                        from . import multipage_choice_manager as mcm
                         self.mcm = mcm.MultiPageChoiceManager(self.ip)
                     self.say(line, TAGS[5])
                     isKeyword = True
@@ -1130,7 +1130,7 @@ class Speech():
         # # If so or if a keyword MUST be found, show the possible options
         if checkValidity or show_options:
             if self._pepper_is_active:
-                import multipage_choice_manager as mcm
+                from . import multipage_choice_manager as mcm
                 self.mcm = mcm.MultiPageChoiceManager(self.ip)
             if show_options:
                 self.say(self.script[ADDITIONAL][SHOW_OPTION][self._lang], TAGS[1])
@@ -1148,14 +1148,14 @@ class Speech():
         @param options (list of str) Possible options (keywords) to chose from
         @return (str) The selected option/keyword
         '''
-        print options
+        print(options)
 
         if not self._pepper_is_active:
 
             if self._input == 0: # # CONSOLE, input from keyboard
                 option = None
                 while not option in options and not option == EXIT:
-                    option = raw_input(Fore.CYAN + "USER > ")
+                    option = input(Fore.CYAN + "USER > ")
                 return option
 
             elif self._input == 1: # # PC, input from PC microphone
@@ -1171,7 +1171,7 @@ class Speech():
                 # # The input is set to Robot mic but Pepper is not active, swith to keyboard input
                 option = None
                 while not option in options and not option == EXIT:
-                    option = raw_input(Fore.CYAN + "USER > ")
+                    option = input(Fore.CYAN + "USER > ")
                 return option
 
         else:
@@ -1185,7 +1185,7 @@ class Speech():
 
             option = self.mcm.giveChoiceMultiPage(question, options)
             self.gothread = False
-            option = [unicode(option[0], "utf-8"), option[1]]
+            option = [str(option[0], "utf-8"), option[1]]
 
             self.mcm.kill()
 
@@ -1276,7 +1276,7 @@ class Speech():
 
         if found_both or found_none:
             if self._pepper_is_active:
-                import multipage_choice_manager as mcm
+                from . import multipage_choice_manager as mcm
                 self.mcm = mcm.MultiPageChoiceManager(self.ip)
             if user_input is not None and not show_options:
                 line = self.script[ADDITIONAL][MISSED_ANSWER][self._lang].encode('utf-8')
@@ -1464,7 +1464,7 @@ class Speech():
                     if guessed_date is not None:
                         date_guess = [guessed_date.year, guessed_date.month, guessed_date.day, guessed_date.isoweekday()]
                 except Exception as e:
-                    print e
+                    print(e)
                     self.monolog(GETDATE, 0, tag=TAGS[1])
                     say = False
                     date_list = [None, None, None, None]
@@ -1715,7 +1715,7 @@ if __name__ == '__main__':
         if topic == "SetReminder":
             options = ["prendere le medicine", "andare dal dottore", "dar da mangiare al gatto"]
 
-    options = [unicode(o, "utf-8") for o in options]
+    options = [str(o, "utf-8") for o in options]
 
     # # Create an instance of the Speech class (from speech import Speech), passing to its constructor the configuration
     # # file (for CARESSES we will use the same "speech_conf.json" for all dialogs) and the language
@@ -1769,7 +1769,7 @@ if __name__ == '__main__':
     try:
         parameter = speech.dialog(topic, options, checkValidity=False, askForConfirmation=True, useChoiceManagerFromStart=False)
         print ("====================================")
-        print ("The parameter is: %s" % parameter)
+        print(("The parameter is: %s" % parameter))
 
         # # To retrieve a time expression from a dialog, call the method dialogTime().
         # # To retrieve a date expression from a dialog, call dialogDateTime(), by passing as first argument a list of
@@ -1788,4 +1788,4 @@ if __name__ == '__main__':
 
         deinit()
     except StopInteraction as e:
-        print e
+        print(e)

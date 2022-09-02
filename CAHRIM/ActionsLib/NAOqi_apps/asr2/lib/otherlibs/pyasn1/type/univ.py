@@ -194,7 +194,7 @@ class Integer(base.AbstractSimpleAsn1Item):
 
     if sys.version_info[0] <= 2:
         def __long__(self):
-            return long(self._value)
+            return int(self._value)
 
     def __float__(self):
         return float(self._value)
@@ -335,7 +335,7 @@ class Boolean(Integer):
     typeId = Integer.getTypeId()
 
 if sys.version_info[0] < 3:
-    SizedIntegerBase = long
+    SizedIntegerBase = int
 else:
     SizedIntegerBase = int
 
@@ -822,7 +822,7 @@ class OctetString(base.AbstractSimpleAsn1Item):
         def prettyIn(self, value):
             if isinstance(value, str):
                 return value
-            elif isinstance(value, unicode):
+            elif isinstance(value, str):
                 try:
                     return value.encode(self.encoding)
                 except (LookupError, UnicodeEncodeError):
@@ -1074,7 +1074,7 @@ class Null(OctetString):
         return octets.str2octs('')
 
 if sys.version_info[0] <= 2:
-    intTypes = (int, long)
+    intTypes = (int, int)
 else:
     intTypes = (int,)
 
@@ -1418,7 +1418,7 @@ class Real(base.AbstractSimpleAsn1Item):
 
     if sys.version_info[0] <= 2:
         def __long__(self):
-            return long(float(self))
+            return int(float(self))
 
     def __float__(self):
         if self._value in self._inf:
@@ -2471,7 +2471,7 @@ class SequenceAndSetBase(base.AbstractConstructedAsn1Item):
     def prettyPrintType(self, scope=0):
         scope += 1
         representation = '%s -> %s {\n' % (self.tagSet, self.__class__.__name__)
-        for idx, componentType in enumerate(self.componentType.values() or self._componentValues):
+        for idx, componentType in enumerate(list(self.componentType.values()) or self._componentValues):
             representation += ' ' * scope
             if self.componentType:
                 representation += '"%s"' % self.componentType.getNameByPosition(idx)

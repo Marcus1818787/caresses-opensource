@@ -27,7 +27,7 @@ import time
 import functools
 from threading import Thread
 
-from choice_manager import ChoiceManager
+from .choice_manager import ChoiceManager
 from naoqi import ALProxy
 
 class Timer(Thread):
@@ -273,6 +273,6 @@ if __name__ == '__main__':
 
     time.sleep(3)
 
-    print multipagechoice.giveChoiceMultiPage(question, options)
+    print(multipagechoice.giveChoiceMultiPage(question, options))
 
     multipagechoice.kill()

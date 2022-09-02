@@ -168,7 +168,7 @@ class Wav:
             return np.int16
         if( nNbrBitsPerSample == 32 ):
             return np.int32 #TODO NOT TESTED: float?
-        raise( BaseException("TODO: handle this NDEV case of unhandled bits per samples" ))
+        raise BaseException
     # getDataType - end
     
     def getNumpyDataType( self ):
@@ -182,7 +182,7 @@ class Wav:
         if( self.nNbrBitsPerSample == 32 ):
             return 0x7FFFFF # NOT TESTED: float ? TODO
 
-        raise( BaseException("TODO: handle this NDEV case of unhandled bits per samples" ) )
+        raise BaseException
     # getSampleMaxValue - end
     
     #~ def durationToNbrSample( self, rDuration ):
@@ -258,11 +258,11 @@ class Wav:
         timeBegin = time.time()
         try:
             file = open( strFilename, "rb" )
-        except BaseException, err:
+        except BaseException as err:
             logging.error( "Can't load '%s', err: %s" % (strFilename, err) )
             return False
         # look for the header part
-        file.seek( 8L, 0 )
+        file.seek( 8, 0 )
         self.strFormatTag = file.read( 8 )
         if( self.strFormatTag != "WAVEfmt " ):
             file.close()
@@ -314,7 +314,7 @@ class Wav:
         if( bLoadData ):
             try:
                 self.data=np.fromfile( file, dtype=self.dataType )
-            except BaseException, err:
+            except BaseException as err:
                 logging.error( "While loading data: err: %s (file:'%s')" % ( err, strFilename ) )
                 file.close()
                 return False
@@ -360,7 +360,7 @@ class Wav:
         timeBegin = time.time()
         try:
             file = open( strFilename, "rb" )
-        except BaseException, err:
+        except BaseException as err:
             logging.error( "Can't load '%s'" % strFilename )
             return False
             
@@ -822,28 +822,28 @@ class Wav:
                 for i in range( len( self.data ) ):
                     if( self.data[i] != rhs.data[i] ):
                         if( nNbrDiff < 20 ):
-                            print( "INF: sound.Wav.isEqual: DIFFERENCE at offset %d: data: %d (0x%02x) and %d (0x%02x)"  % ( i, self.data[i],self.data[i],rhs.data[i],rhs.data[i] ) )
+                            print(( "INF: sound.Wav.isEqual: DIFFERENCE at offset %d: data: %d (0x%02x) and %d (0x%02x)"  % ( i, self.data[i],self.data[i],rhs.data[i],rhs.data[i] ) ))
                         nNbrDiff += 1
-                print( "INF: sound.Wav.isEqual: %d DIFFERENCE(s) found..." % nNbrDiff )
+                print(( "INF: sound.Wav.isEqual: %d DIFFERENCE(s) found..." % nNbrDiff ))
             
         return bRet
     # isEqual - end
 
     def hasSameProperties( self, rhs ):
         if( self.nNbrChannel != rhs.nNbrChannel ):
-            print( "INF: sound.Wav.hasSameProperties: different nbr channel: %s != %s" % ( self.nNbrChannel,  rhs.nNbrChannel) )
+            print(( "INF: sound.Wav.hasSameProperties: different nbr channel: %s != %s" % ( self.nNbrChannel,  rhs.nNbrChannel) ))
             return False
         if( self.nSamplingRate != rhs.nSamplingRate ):
-            print( "INF: sound.Wav.hasSameProperties: different sampling rate: %s != %s" % ( self.nSamplingRate,  rhs.nSamplingRate) )
+            print(( "INF: sound.Wav.hasSameProperties: different sampling rate: %s != %s" % ( self.nSamplingRate,  rhs.nSamplingRate) ))
             return False
         if( self.nAvgBytesPerSec != rhs.nAvgBytesPerSec ):
-            print( "INF: sound.Wav.hasSameProperties: different nAvgBytesPerSec: %s != %s" % ( self.nAvgBytesPerSec,  rhs.nAvgBytesPerSec) )
+            print(( "INF: sound.Wav.hasSameProperties: different nAvgBytesPerSec: %s != %s" % ( self.nAvgBytesPerSec,  rhs.nAvgBytesPerSec) ))
             return False
         if( self.nSizeBlockAlign != rhs.nSizeBlockAlign ):
-            print( "INF: sound.Wav.hasSameProperties: different nSizeBlockAlign: %s != %s" % ( self.nSizeBlockAlign,  rhs.nSizeBlockAlign) )
+            print(( "INF: sound.Wav.hasSameProperties: different nSizeBlockAlign: %s != %s" % ( self.nSizeBlockAlign,  rhs.nSizeBlockAlign) ))
             return False
         if( self.nNbrBitsPerSample != rhs.nNbrBitsPerSample ):
-            print( "INF: sound.Wav.hasSameProperties: different nNbrBitsPerSample: %s != %s" % ( self.nNbrBitsPerSample,  rhs.nNbrBitsPerSample) )
+            print(( "INF: sound.Wav.hasSameProperties: different nNbrBitsPerSample: %s != %s" % ( self.nNbrBitsPerSample,  rhs.nNbrBitsPerSample) ))
             return False
         #~ if( self.nDataSize != rhs.nDataSize ):
             #~ print( "INF: sound.Wav.hasSameProperties: different nNbrBitsPerSample: %s != %s" % ( self.nDataSize,  rhs.nDataSize) )
@@ -860,7 +860,7 @@ class Wav:
         return a list of new created wav
         """
         nLimit = int( self.getSampleMaxValue() * rSilenceTresholdPercent / 100 )        
-        print( "INF: sound.Wav.split: splitting a sound of %5.3fs, using silence limits at %d for %5.3fs" % (self.rDuration, nLimit, rSilenceMinDuration) ) 
+        print(( "INF: sound.Wav.split: splitting a sound of %5.3fs, using silence limits at %d for %5.3fs" % (self.rDuration, nLimit, rSilenceMinDuration) )) 
         aSplitted = []
         
         precalcWavIsNotSilence = np.abs(self.data)>nLimit
@@ -879,7 +879,7 @@ class Wav:
                 break
             nFirstNonSilenceIndex += nCurrentPos
             nNumFirstSample = nFirstNonSilenceIndex/self.nNbrChannel
-            print( "INF: sound.Wav.split: found a sound at sample %d" % nNumFirstSample )
+            print(( "INF: sound.Wav.split: found a sound at sample %d" % nNumFirstSample ))
             nCurrentPos = nFirstNonSilenceIndex # so at the end, we're stopping
             
             # then find end
@@ -909,7 +909,7 @@ class Wav:
             if( nFirstSilenceIndex == -1 ):
                 break
             nNumLastSample = nFirstSilenceIndex/self.nNbrChannel
-            print( "INF: sound.Wav.split: found the end of that sound at sample %d" % nNumLastSample )
+            print(( "INF: sound.Wav.split: found the end of that sound at sample %d" % nNumLastSample ))
             if( nNumLastSample - nNumFirstSample > 4000 ):
                 w = Wav()
                 w.copyHeader( self )
@@ -917,14 +917,14 @@ class Wav:
                 nPeakMax = max( max( w.data ), -min( w.data ) )
                 if( nPeakMax > self.getSampleMaxValue() / 8 ): # remove glitch sound
                     w.updateHeaderSizeFromDataLength()
-                    print( "INF: sound.Wav.split: new split of %5.2fs" % w.rDuration )
+                    print(( "INF: sound.Wav.split: new split of %5.2fs" % w.rDuration ))
                     aSplitted.append( w )
             #~ print( "nCurLocalVs: %s" % nCurLocalVs )
             if( nExtractJustFirsts != -1 and nExtractJustFirsts == len(aSplitted) ):
-                print( "WRN: sound.Wav.split: got enough split (%d), leaving..." % len(aSplitted) )
+                print(( "WRN: sound.Wav.split: got enough split (%d), leaving..." % len(aSplitted) ))
                 break
         # while - end
-        print( "INF: sound.Wav.split: created %d wav(s)" % len( aSplitted ) )
+        print(( "INF: sound.Wav.split: created %d wav(s)" % len( aSplitted ) ))
         return aSplitted
     # split - end
     

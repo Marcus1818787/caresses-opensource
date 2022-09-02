@@ -27,7 +27,7 @@ import math
 import numpy
 import os
 import json
-import tkFileDialog, tkMessageBox
+import tkinter.filedialog, tkinter.messagebox
 
 from threading import Thread
 from matplotlib.patches import Rectangle
@@ -467,7 +467,7 @@ class GraphFile():
 
         initialdir = os.path.dirname(os.path.realpath(__file__))
 
-        self.filename = tkFileDialog.asksaveasfilename(initialdir=initialdir, title="Choose directory and file name", defaultextension=".json")
+        self.filename = tkinter.filedialog.asksaveasfilename(initialdir=initialdir, title="Choose directory and file name", defaultextension=".json")
 
         if self.filename:
             with open(self.filename, "w") as f:
@@ -487,12 +487,12 @@ class GraphFile():
         initialdir = os.path.dirname(os.path.realpath(__file__))
 
         if not self.saved:
-            save_before_open = tkMessageBox.askyesno("Current work will be lost!", "Do you want to save your work before opening a new file?")
+            save_before_open = tkinter.messagebox.askyesno("Current work will be lost!", "Do you want to save your work before opening a new file?")
 
             if save_before_open:
                 self.save()
 
-        self.filename = tkFileDialog.askopenfilename(initialdir=initialdir, title="Open file", defaultextension=".json")
+        self.filename = tkinter.filedialog.askopenfilename(initialdir=initialdir, title="Open file", defaultextension=".json")
 
         if self.filename:
             self.unloadCurrentWork(draw=True)
@@ -586,7 +586,7 @@ class GraphFile():
     def close(self):
 
         if not self.saved:
-            exit_without_saving = tkMessageBox.askyesno("Current work will be lost!",
+            exit_without_saving = tkinter.messagebox.askyesno("Current work will be lost!",
                                                      "Are you sure you want to exit without saving your work?")
             if not exit_without_saving:
                 self.save()
@@ -730,8 +730,8 @@ def sortNodesFromClosestToFurthest(current_pose, node_list):
 
 
 def setFigure(axes, width):
-    axes.set_xticks(range(-100, 100, 1))
-    axes.set_yticks(range(-100, 100, 1))
+    axes.set_xticks(list(range(-100, 100, 1)))
+    axes.set_yticks(list(range(-100, 100, 1)))
 
     xlim = int(round((width / 30) / 2))
 
@@ -847,9 +847,9 @@ def drawNode(figure, axes, drawn_plot, node, reached):
 def printGoalInfo(goal, robot_goal):
 
     print("Goal in world frame (u):")
-    print(goal.x, goal.y)
+    print((goal.x, goal.y))
     print("Goal in robot frame (u):")
-    print(robot_goal.x, robot_goal.y)
+    print((robot_goal.x, robot_goal.y))
     # print("Goal in world frame (m):")
     # print(goal.toMeters().x, goal.toMeters().y)
     # print("Goal in robot frame (m):")

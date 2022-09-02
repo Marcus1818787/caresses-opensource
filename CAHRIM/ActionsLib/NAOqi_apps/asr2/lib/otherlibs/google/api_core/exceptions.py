@@ -18,8 +18,8 @@ This module provides base classes for all errors raised by libraries based
 on :mod:`google.api_core`, including both HTTP and gRPC clients.
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 
 import six
 from six.moves import http_client
@@ -378,7 +378,7 @@ def from_http_response(response):
     error_message = payload.get('error', {}).get('message', 'unknown error')
     errors = payload.get('error', {}).get('errors', ())
 
-    message = u'{method} {url}: {error}'.format(
+    message = '{method} {url}: {error}'.format(
         method=response.request.method,
         url=response.request.url,
         error=error_message)

@@ -46,12 +46,10 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
-class FreeSpeech():
+class FreeSpeech(metaclass=Singleton):
     """
     Freespeech with google
     """
-    #specify that FreeSpeech is an instantiation of the metaclass Singleton
-    __metaclass__ = Singleton
     
     def __init__( self, session ):
         self.session = session
@@ -74,14 +72,14 @@ class FreeSpeech():
     def cleanText2( self, txt ):
         try:
             txt = str(txt)
-        except BaseException, err:
+        except BaseException as err:
             logging.debug( "can't convert text to ascii?" )
             try:
                 txt = self.cleanText(txt)
             except:
 #                    logging.warning("freespeech : analyse : you need to install beautifulsoup4")
                 #Methode with "ai"
-                unicoded = unicode(txt).encode('utf8')
+                unicoded = str(txt).encode('utf8')
                 logging.debug( "unicoded: %s" % unicoded )
                 utxt = str(unicoded)
                 logging.debug( "txt: %s" % utxt )

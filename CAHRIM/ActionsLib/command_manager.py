@@ -25,21 +25,21 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 import qi
 import time
 import functools
-import caressestools.caressestools as caressestools
+from . import caressestools.caressestools as caressestools
 import socket
 import time
 import os
 import random
 import string
-import action
+from . import action
 import json
-from caressestools.multipage_choice_manager import MultiPageChoiceManager
-from caressestools.speech import CAHRIM_KILL_ACTION, KillAction
-from chitchat import ChitChat
+from .caressestools.multipage_choice_manager import MultiPageChoiceManager
+from .caressestools.speech import CAHRIM_KILL_ACTION, KillAction
+from .chitchat import ChitChat
 from collections import OrderedDict
 import csv
 import threading
-import caressestools.speech as speech
+from . import caressestools.speech as speech
 import sys
 from CahrimThreads.sensory_hub import DetectUserDepth
 import CahrimThreads.socket_handlers
@@ -293,7 +293,7 @@ class CommandManager(object):
                 except:
                     pass
 
-                for i in xrange(0,len(self.inputs["AcceptRequest"]["replacement"][self.language.lower()]),2):
+                for i in range(0,len(self.inputs["AcceptRequest"]["replacement"][self.language.lower()]),2):
                     replaced=self.sentence.replace(self.inputs["AcceptRequest"]["replacement"][self.language.lower()][i],self.inputs["AcceptRequest"]["replacement"][self.language.lower()][i+1])
 
 
@@ -304,7 +304,7 @@ class CommandManager(object):
                 self.initSoundService(self.soundService)
 
 
-                for entry in self.inputDict.keys():
+                for entry in list(self.inputDict.keys()):
                     if "action" in entry:
                         if self.inputDict[entry]["id_request"].split(" ")[0] in self.CMoptions["IDs"][self.sugg[tosugg]]["pddl"]:
                             self.letssay= self.inputDict[entry]["request_parameters_1"][0] + " " + self.inputDict[entry]["request_parameters_2"][0]
@@ -323,7 +323,7 @@ class CommandManager(object):
         self.timeout=0
         self.letssay=""
         self.iteration=1
-        self.rr=random.choice(range(0,2))
+        self.rr=random.choice(list(range(0,2)))
         self.tosugg=CahrimThreads.socket_handlers.InputMsgHandler.getCounter()
         self.randomtopic=CahrimThreads.socket_handlers.InputMsgHandler.getCounter2()
         self.isproposal=True
@@ -659,7 +659,7 @@ class CommandManager(object):
                             thr.start()
                         a=self.choice.giveChoiceMultiPage(question, [self.inputs["AcceptRequest"]["england"][self.language.lower()], self.inputs["AcceptRequest"]["india"][self.language.lower()],self.inputs["AcceptRequest"]["japan"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                         self.gothread = False
-                        a = [unicode(a[0], "utf-8"), a[1]]
+                        a = [str(a[0], "utf-8"), a[1]]
                         self.sp.userSaid(str(a))
                         if a[0]==self.inputs["AcceptRequest"]["india"][self.language.lower()]:
                             st1="indian"
@@ -680,7 +680,7 @@ class CommandManager(object):
                             thr.start()
                         a=self.choice.giveChoiceMultiPage(question, [self.inputs["AcceptRequest"]["english"][self.language.lower()], self.inputs["AcceptRequest"]["italian"][self.language.lower()],self.inputs["AcceptRequest"]["japanese"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                         self.gothread = False
-                        a = [unicode(a[0], "utf-8"), a[1]]
+                        a = [str(a[0], "utf-8"), a[1]]
                         self.sp.userSaid(str(a))
                         if a[0]==self.inputs["AcceptRequest"]["italian"][self.language.lower()]:
                             st2="it"
@@ -1009,7 +1009,7 @@ class CommandManager(object):
             thr.start()
         a=self.choice.giveChoiceMultiPage(question, [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False, timer=self.gt+60)
         self.gothread = False
-        a = [unicode(a[0], "utf-8"), a[1]]
+        a = [str(a[0], "utf-8"), a[1]]
         if (self.timeout!=1):
             self.sp.userSaid(str(a))
         self.choice.kill()
@@ -1023,21 +1023,21 @@ class CommandManager(object):
     def getInputFromChoiceManagerObjects(self, tabletview):
         display=[]
         for i in range(0, len(self.CMoptions["IDs"])):
-            if (self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["tablet-view"])==tabletview:
+            if (self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["tablet-view"])==tabletview:
                 a=i
-                for j in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"])):
-                    display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"][j])
+                for j in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"])):
+                    display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"][j])
         if self.sp._input==2:
             self.gothread = True
             thr = threading.Thread(name="getinput", target=self.getOptionsFromSmartphone, args=[display])
             thr.start()
         self.result2= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["cm_q2"][self.language.lower()], display, confidence=0.50, bSayQuestion=False)
         self.gothread = False
-        self.result2 = [unicode(self.result2[0], "utf-8"), self.result2[1]]
+        self.result2 = [str(self.result2[0], "utf-8"), self.result2[1]]
         self.sp.userSaid(str(self.result2))
-        for i in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"])):
-            if(self.result2[0]==self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"][i]):
-                self.tobese=self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"][i]
+        for i in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"])):
+            if(self.result2[0]==self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"][i]):
+                self.tobese=self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"][i]
                 break
             else:
                 self.tobese="EXIT"
@@ -1058,14 +1058,14 @@ class CommandManager(object):
         self.tagsaved=speech.TAGS[22]
 
         for i in range(0, len(self.CMoptions["IDs"])):
-            if self.CMoptions["IDs"].keys()[i] in self.sugg:
-                display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["tablet-view"])
+            if list(self.CMoptions["IDs"].keys())[i] in self.sugg:
+                display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["tablet-view"])
 
         display.append(self.inputs["AcceptRequest"]["Chitchat"][self.language.lower()])
 
         for i in range(0, len(self.CMoptions["IDs"])):
-            if self.CMoptions["IDs"].keys()[i] not in self.sugg:
-                display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["tablet-view"])
+            if list(self.CMoptions["IDs"].keys())[i] not in self.sugg:
+                display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["tablet-view"])
 
         if self.sp._input==2:
             self.gothread = True
@@ -1073,7 +1073,7 @@ class CommandManager(object):
             thr.start()
         self.result= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["cm_q1"][self.language.lower()], display, confidence=0.50, bSayQuestion=False)
         self.gothread = False
-        self.result = [unicode(self.result[0], "utf-8"), self.result[1]]
+        self.result = [str(self.result[0], "utf-8"), self.result[1]]
         self.sp.userSaid(str(self.result))
         display=[]
         display_temp=[]
@@ -1164,16 +1164,16 @@ class CommandManager(object):
                         keywords.append(self.inputs["AcceptRequest"]["keywords_to_be_appended"][self.language.lower()][10])
 
         for i in range(0, len(self.CMoptions["IDs"])):
-            if self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["tablet-view"]==self.result[0]:
+            if self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["tablet-view"]==self.result[0]:
                 a=i
-                if ("options" in self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]):
-                    for j in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["full"])):
-                       if self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["IDs"][j] in self.options:
-                            display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["full"][j])
-                    for j in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["full"])):
-                       if self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["IDs"][j] not in self.options:
-                            display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["options"]["full"][j])
-                self.msg=self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["pddl"]
+                if ("options" in self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]):
+                    for j in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["full"])):
+                       if self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["IDs"][j] in self.options:
+                            display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["full"][j])
+                    for j in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["full"])):
+                       if self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["IDs"][j] not in self.options:
+                            display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["options"]["full"][j])
+                self.msg=self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["pddl"]
             
 
         if (self.result[0]==self.inputs["AcceptRequest"]["Chitchat"][self.language.lower()]):
@@ -1183,7 +1183,7 @@ class CommandManager(object):
                 thr.start()
             self.result2= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["cm_q2"][self.language.lower()], display, confidence=0.50, bSayQuestion=False)
             self.gothread = False
-            self.result2 = [unicode(self.result2[0], "utf-8"), self.result2[1]]
+            self.result2 = [str(self.result2[0], "utf-8"), self.result2[1]]
             for i in range(0, len(keywords)):
                 if (self.result2[0]==display[i]):
                     self.tobese=keywords[i]
@@ -1196,10 +1196,10 @@ class CommandManager(object):
                 thr.start()
             self.result2= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["cm_q2"][self.language.lower()], display, confidence=0.50, bSayQuestion=False)
             self.gothread = False
-            self.result2 = [unicode(self.result2[0], "utf-8"), self.result2[1]]
-            for i in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"])):
-                if(self.result2[0]==self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"][i]):
-                    self.tobese=self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"][i]
+            self.result2 = [str(self.result2[0], "utf-8"), self.result2[1]]
+            for i in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"])):
+                if(self.result2[0]==self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"][i]):
+                    self.tobese=self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"][i]
 
         self.sp.userSaid(str(self.result2))
 
@@ -1212,7 +1212,7 @@ class CommandManager(object):
     def checkInputDict(self):
         self.intent="talk"
         self.talk=""
-        for entry in self.inputDict.keys():
+        for entry in list(self.inputDict.keys()):
             if "action" in entry:
                 for req_par_1 in self.inputDict[entry]["request_parameters_1"]:
                     if req_par_1.lower() in " "+self.user_input.lower()+" *":
@@ -1223,7 +1223,7 @@ class CommandManager(object):
                                 self.confirm = self.inputDict[entry]["confirmation"]
 
 
-        for entry in self.inputDict.keys():
+        for entry in list(self.inputDict.keys()):
             if "talk" in entry:
                 for req_par_1 in self.inputDict[entry]["request_parameters_1"]:
                     if req_par_1.lower() in self.user_input.lower()+" *":
@@ -1278,7 +1278,7 @@ class CommandManager(object):
 
             toret = CahrimThreads.socket_handlers.InputMsgHandler.getSmartphone() 
             CahrimThreads.socket_handlers.InputMsgHandler.resetSmartphone()
-            if toret is not None and toret.lower() in map(str.lower,options_str) and toret is not "":
+            if toret is not None and toret.lower() in list(map(str.lower,options_str)) and toret is not "":
                 self.sMemory.insertData("WordRecognized", ["<...> "+toret+" <...>", 1])
             #elif toret is not None:
             #   self.output_handler.writeSupplyMessage("publish", "D11.6", "robotListens")

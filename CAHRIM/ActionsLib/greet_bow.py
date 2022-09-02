@@ -26,9 +26,9 @@ import qi
 import argparse
 import sys
 
-from greet  import Greet
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .greet  import Greet
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 
 ## Action "Greet Bow".
@@ -83,11 +83,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip

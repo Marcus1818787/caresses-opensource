@@ -72,4 +72,4 @@ def generateFatBass( rSoundDuration = 1., rFrequency = 440. ):
     
     wav.write( "/tmp/generated.wav" )
     rDuration = time.time()-timeBegin
-    print( "INF: sound.generateFatBass: generating a sound of %5.3fs in %5.3fs (%5.2fx RT)" % (rSoundDuration,rDuration,rSoundDuration/rDuration) )
+    print(( "INF: sound.generateFatBass: generating a sound of %5.3fs in %5.3fs (%5.2fx RT)" % (rSoundDuration,rDuration,rSoundDuration/rDuration) ))

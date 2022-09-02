@@ -15,7 +15,7 @@ import struct
 import sys
 import time
 
-from wav import Wav
+from .wav import Wav
 
 # import naoqitools
 # import system
@@ -62,7 +62,7 @@ def analyseSound_pause( bWaitForResume ):
         if( bWaitForResume ):
             nTime = -1
         analyser.inhibitSoundAnalyse( nTime )
-    except BaseException, err:
+    except BaseException as err:
         logging.debug( "analyseSound_pause: ERR: " + str( err ) )
         global_bUsageNoiseExtractorIsNotPresent = True
 # analyseSound_pause - end
@@ -76,7 +76,7 @@ def analyseSound_resume( bWaitForResume ):
         try:
             analyser = naoqitools.myGetProxy( "UsageNoiseExtractor" )
             analyser.inhibitSoundAnalyse( 0 )
-        except BaseException, err:
+        except BaseException as err:
             logging.debug( "analyseSound_resume: ERR: " + str( err ) )
             global_bUsageNoiseExtractorIsNotPresent = True
 # analyseSound_resume - end
@@ -86,8 +86,8 @@ def removeBlankFromFile( strFilename, b16Bits = True, bStereo = False ):
   "bStereo: if set, it remove only by packet of 4 bytes (usefull for raw in stereo 16 bits recording)"
   try:
     file = open( strFilename, "rb" )
-  except BaseException, err:
-    print( "WRN: removeBlankFromFile: ??? (err:%s)" % ( str( err ) ) )
+  except BaseException as err:
+    print(( "WRN: removeBlankFromFile: ??? (err:%s)" % ( str( err ) ) ))
 
     return False
     
@@ -124,19 +124,19 @@ def removeBlankFromFile( strFilename, b16Bits = True, bStereo = False ):
 
   #  debug( "sound::removeBlankFromFile: nNumTrimAtBegin: %d, nNumTrimAtEnd: %d, nFileSize: %d" % (nNumTrimAtBegin, nNumTrimAtEnd, nFileSize ) )
     if( nNumTrimAtBegin > 0 or nNumTrimAtEnd < nFileSize - 1 ):
-        print( "sound::removeBlankFromFile: trim at begin: %d pos trim at end: %d (data trimmed:%d)" % ( nNumTrimAtBegin, nNumTrimAtEnd, nNumTrimAtBegin + ( nFileSize - nNumTrimAtEnd ) ) );
+        print(( "sound::removeBlankFromFile: trim at begin: %d pos trim at end: %d (data trimmed:%d)" % ( nNumTrimAtBegin, nNumTrimAtEnd, nNumTrimAtBegin + ( nFileSize - nNumTrimAtEnd ) ) ));
         aBuf = aBuf[nNumTrimAtBegin:nNumTrimAtEnd]
         try:
             file = open( strFilename, "wb" )
-        except BaseException, err:
-            print( "WRN: sound::removeBlankFromFile: dest file open error (2) (err:%s)" % ( str( err ) ) )
+        except BaseException as err:
+            print(( "WRN: sound::removeBlankFromFile: dest file open error (2) (err:%s)" % ( str( err ) ) ))
             return False
         try:
             file.write( aBuf )
         finally:            
             file.close()
-  except BaseException, err:
-    print( "sound::removeBlankFromFile: ERR: something wrong occurs (file not found or ...) err: " + str( err ) )
+  except BaseException as err:
+    print(( "sound::removeBlankFromFile: ERR: something wrong occurs (file not found or ...) err: " + str( err ) ))
     return False
   return True
 # removeBlankFromFile - end
@@ -147,8 +147,8 @@ def loadSound16( strFileIn, nNbrChannel = 1 ):
     aSamplesMono = []    
     try:
         file = open( strFileIn, "rb" )
-    except BaseException, err:
-        print( "sound::loadSound16: ERR: something wrong occurs: %s" % str( err ) )
+    except BaseException as err:
+        print(( "sound::loadSound16: ERR: something wrong occurs: %s" % str( err ) ))
         return []
     try:
         aBuf = file.read()  
@@ -157,10 +157,10 @@ def loadSound16( strFileIn, nNbrChannel = 1 ):
         lenFile = len( aBuf )
         strHeaderTag = struct.unpack_from( "4s", aBuf, 0 )[0]
         if( strHeaderTag == "RIFF" ):
-            print( "sound::loadSound16: skipping wav header found in %s" % strFileIn )
+            print(( "sound::loadSound16: skipping wav header found in %s" % strFileIn ))
             nOffset += 44 # c'est en fait un wav, on saute l'entete (bourrin)
         
-        print( "sound::loadSound16: reading file '%s' of size %d interpreted as %d channel(s)" % ( strFileIn, lenFile, nNbrChannel ) )
+        print(( "sound::loadSound16: reading file '%s' of size %d interpreted as %d channel(s)" % ( strFileIn, lenFile, nNbrChannel ) ))
         while( nOffset < lenFile ):
             nValSample = struct.unpack_from( "h", aBuf, nOffset )[0]
             aSamplesMono.append( nValSample ) # ici c'est lourd car on alloue un par un (pas de reserve) (des essais en initialisant le tableau  avec des [0]*n, font gagner un petit peu (5.0 sec au lieu de 5.4)
@@ -168,11 +168,11 @@ def loadSound16( strFileIn, nNbrChannel = 1 ):
             if( nNbrChannel > 1 ):
                 nOffset += 2 # skip right channel
         # while - end
-    except BaseException, err:
-        print( "sound::loadSound16: ERR: something wrong occurs: %s" % str( err ) )
+    except BaseException as err:
+        print(( "sound::loadSound16: ERR: something wrong occurs: %s" % str( err ) ))
         pass
         
-    print( "=> %d samples" %  len( aSamplesMono ) )    
+    print(( "=> %d samples" %  len( aSamplesMono ) ))    
     return aSamplesMono
 # loadSound16 - end
 
@@ -188,7 +188,7 @@ def computePeak16( strFilename ):
     nMax = 0
     nOffset = 0
     nNbrSample = len( aMonoSound )
-    print( "computeMax16: analysing %d sample(s)" % nNbrSample )
+    print(( "computeMax16: analysing %d sample(s)" % nNbrSample ))
     while( nOffset < nNbrSample ):
         nVal = aMonoSound[nOffset]
         if( nVal < 0 ):
@@ -211,7 +211,7 @@ def computeEnergyBest( aSample ):
 #	nMean = 0
         nNumSample = len( aSample )
 
-        for i in xrange( 1, nNumSample ):
+        for i in range( 1, nNumSample ):
 #		nMean += aSample[i]
                 nDiff = aSample[i] - aSample[i-1]
                 nEnergy += nDiff*nDiff
@@ -237,7 +237,7 @@ def convertEnergyToEyeColor_Intensity( nValue, nMax ):
 
 def analyseSpeakSound( strRawFile, nSampleLenMs = 50, bStereo = False ):
     "Analyse a raw stereo or mono sound file, and found the light curve relative to sound (for further speaking)"
-    print( "analyseSpeakSound: analysing '%s' (time:%d)" % ( strRawFile, int( time.time() ) ) )
+    print(( "analyseSpeakSound: analysing '%s' (time:%d)" % ( strRawFile, int( time.time() ) ) ))
     nNbrChannel = 1
     if( bStereo ):
         nNbrChannel = 2
@@ -251,7 +251,7 @@ def analyseSpeakSound( strRawFile, nSampleLenMs = 50, bStereo = False ):
     nMax = 0
     nOffset = 0
     nNbrSample = len( aMonoSound )
-    print( "analyseSpeakSound: analysing %d sample(s)" % nNbrSample )
+    print(( "analyseSpeakSound: analysing %d sample(s)" % nNbrSample ))
     while( nOffset < nNbrSample ):
         anBuf = aMonoSound[nOffset:nOffset+nSizeAnalyse]
         nOffset += nSizeAnalyse
@@ -265,13 +265,13 @@ def analyseSpeakSound( strRawFile, nSampleLenMs = 50, bStereo = False ):
     # convert nValue to nColor (using max energy)
     nOffset = 0
     nNbrComputed = len( anLedsColorSequency )
-    print( "analyseSpeakSound: converting %d energy to leds light (max=%d)" % ( nNbrComputed, nMax) )
+    print(( "analyseSpeakSound: converting %d energy to leds light (max=%d)" % ( nNbrComputed, nMax) ))
     while( nOffset < nNbrComputed ):
         anLedsColorSequency[nOffset] = convertEnergyToEyeColor_Intensity( anLedsColorSequency[nOffset], nMax )
         nOffset += 1
     # while - end
 
-    print( "analyseSpeakSound: analysing '%s' (time:%d) - end" % ( strRawFile, int( time.time() ) ) )
+    print(( "analyseSpeakSound: analysing '%s' (time:%d) - end" % ( strRawFile, int( time.time() ) ) ))
     return anLedsColorSequency
 # analyseSpeakSound - end
 
@@ -285,7 +285,7 @@ def convertRaw2432ToWav( strRawFileName, strDstFileName = None, nDstDepth = 16, 
         
     data = np.fromfile( strRawFileName, dtype=np.int32 )
     for i in range(4):
-        print( "data[%d]: %s (0x%x)" % (i, data[i], data[i]) )
+        print(( "data[%d]: %s (0x%x)" % (i, data[i], data[i]) ))
         
     wav = Wav()
     wav.new( nSamplingRate = nUseSampleRate, nNbrChannel = 1, nNbrBitsPerSample = nDstDepth )
@@ -299,12 +299,12 @@ def convertRaw2432ToWav( strRawFileName, strDstFileName = None, nDstDepth = 16, 
         wav.data.append( nVal )
 
     for i in range(4):
-        print( "wav.data[%d]: %s (0x%x)" % (i, wav.data[i], wav.data[i]) )
+        print(( "wav.data[%d]: %s (0x%x)" % (i, wav.data[i], wav.data[i]) ))
 
     wav.updateHeaderSizeFromDataLength()
     wav.write( strDstFileName )
     
-    print( "INF: convertRaw2432ToWav: '%s' => '%s' (sample nbr:%d)" % (strRawFileName, strDstFileName, len(wav.data)) )
+    print(( "INF: convertRaw2432ToWav: '%s' => '%s' (sample nbr:%d)" % (strRawFileName, strDstFileName, len(wav.data)) ))
 # convertRaw2432ToWav - end
 
 def convertRaw2432InterlacedToWav( strRawFileName, nNbrChannel = 16, strDstFileName = None, nDstDepth = 16, nUseSampleRate = 16000 ):
@@ -316,7 +316,7 @@ def convertRaw2432InterlacedToWav( strRawFileName, nNbrChannel = 16, strDstFileN
         
     data = np.fromfile( strRawFileName, dtype=np.int32 )
     for i in range(4):
-        print( "data[%d]: %s (0x%x)" % (i, data[i], data[i]) )
+        print(( "data[%d]: %s (0x%x)" % (i, data[i], data[i]) ))
         
     nNbrSamplePerChannel = len(data)/nNbrChannel
     for nNumChannel in range( nNbrChannel ):
@@ -333,11 +333,11 @@ def convertRaw2432InterlacedToWav( strRawFileName, nNbrChannel = 16, strDstFileN
             wav.data.append( nVal )
 
         for i in range(4):
-            print( "wav.data[%d]: %s (0x%x)" % (i, wav.data[i], wav.data[i]) )
+            print(( "wav.data[%d]: %s (0x%x)" % (i, wav.data[i], wav.data[i]) ))
 
         wav.updateHeaderSizeFromDataLength()
         wav.write( strDstFileName % nNumChannel )
         
-        print( "INF: convertRaw2432ToWav: '%s' => '%s' (sample nbr:%d)" % (strRawFileName, strDstFileName, len(wav.data)) )
+        print(( "INF: convertRaw2432ToWav: '%s' => '%s' (sample nbr:%d)" % (strRawFileName, strDstFileName, len(wav.data)) ))
     # for - end
 # convertRaw2432InterlacedToWav - end

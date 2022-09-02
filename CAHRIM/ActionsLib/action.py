@@ -26,9 +26,9 @@ import json
 import os
 import logging
 
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-from caressestools.speech import CAHRIM_KILL_ACTION
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from .caressestools.speech import CAHRIM_KILL_ACTION
 
 
 ## Default %Action
@@ -119,7 +119,7 @@ class Action:
     #  @param attributeField Key of which the value should be retrieved.
     def getAttributeFromID(self, parameters, id, attributeField):
         attribute = parameters["IDs"][id][attributeField].encode('utf-8')
-        return unicode(attribute, 'utf-8')
+        return str(attribute, 'utf-8')
 
     ## Retrieve the ID of the given parameter through the specified key-value pair.
     #  @param parameters Content of the parameters file.

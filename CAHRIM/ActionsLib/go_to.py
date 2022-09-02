@@ -50,13 +50,13 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 import time
 from random import randint
 
-from action import Action
-from set_node import SetNode
-from aux_files.go_to.graphnavigation import *
+from .action import Action
+from .set_node import SetNode
+from .aux_files.go_to.graphnavigation import *
 from CahrimThreads.sensory_hub import OdomConverter
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-from caressestools.caressestools import MEMORY_CHARGER, MEMORY_FIXED_POSE
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from .caressestools.caressestools import MEMORY_CHARGER, MEMORY_FIXED_POSE
 
 # MAX_NODES_DISTANCE = 2.9
 CHARGER = "charger"
@@ -205,7 +205,7 @@ class GoTo(Action):
         if self.final_goal is None:
             self.logger.error(ERROR[1])
             self.sp.monolog(self.__class__.__name__, "2", tag=speech.TAGS[1])
-            raise Exception, "Invalid goal"
+            raise Exception("Invalid goal")
 
         # # Initialize motion
 
@@ -450,11 +450,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -470,4 +470,4 @@ if __name__ == "__main__":
     try:
         n.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

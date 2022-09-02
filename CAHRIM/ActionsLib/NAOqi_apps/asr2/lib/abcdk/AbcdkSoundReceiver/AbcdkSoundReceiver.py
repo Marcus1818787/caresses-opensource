@@ -21,8 +21,8 @@ import threading
 import logging
 import argparse
 
-from vad import VAD
-from sound_analyser import SoundAnalyser
+from .vad import VAD
+from .sound_analyser import SoundAnalyser
 #
 import abcdk.sound.analyse
 from abcdk.leds import LedsDcm

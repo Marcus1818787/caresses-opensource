@@ -67,7 +67,7 @@ class ElanGenerator:
                 data = emptyData
                 data = [] # to remove silence in the destination
             out.extend(data)
-        print len(out)
+        print(len(out))
         return out
                 
     # generateSoundFromFlag - end
@@ -78,7 +78,7 @@ class ElanGenerator:
         """
         file = open( strDestinationFile, "wt" )
         if not file:
-            print( "ERR: generateEafFile: cannot write to '%s'" % strDestinationFile )
+            print(( "ERR: generateEafFile: cannot write to '%s'" % strDestinationFile ))
             return -1
         absfile = strAudioReferenceFilename
         relfile = ""
@@ -130,7 +130,7 @@ class ElanGenerator:
         #~ print out
         file.write(out)
         file.close()
-        print( "INF: generateEafFile: '%s' generated (refering '%s')" % (strDestinationFile,strAudioReferenceFilename) )
+        print(( "INF: generateEafFile: '%s' generated (refering '%s')" % (strDestinationFile,strAudioReferenceFilename) ))
 
         strOutFilenameNoExt = os.path.basename(strAudioReferenceFilename)
         strOutFilenameNoExt = os.path.splitext(strOutFilenameNoExt)[0]
@@ -140,7 +140,7 @@ class ElanGenerator:
             file = open( "/tmp/" + strOutFilename, "wt" )
             file.write(outCompactInfo)
             file.close()
-            print( "INF: generateEafFile: compact '%s' written" % strOutFilename )
+            print(( "INF: generateEafFile: compact '%s' written" % strOutFilename ))
         
         if 1:
             # output srt file            
@@ -148,7 +148,7 @@ class ElanGenerator:
             file = open( "/tmp/" + strOutFilename, "wt" )
             file.write(outSrtInfo)
             file.close()
-            print( "INF: generateEafFile: srt '%s' written" % strOutFilename )
+            print(( "INF: generateEafFile: srt '%s' written" % strOutFilename ))
             
         return 1        
         
@@ -252,7 +252,7 @@ class ElanGenerator:
             plt.plot(res)
             
             plt.title("mfcc")
-            plt.legend(range(len(res)))
+            plt.legend(list(range(len(res))))
 
             plt.subplot(3,1,3)
             plt.plot(aVadStateChange)
@@ -305,7 +305,7 @@ class ElanGenerator:
         lenSpeech = sum(aFlagVAD)
         ratioSpeech = lenSpeech/float(len(aFlagVAD))
         lenSpeech = lenSpeech*window_step_in_sec
-        print("INF: analyseFile/Buf: lenSpeech: %5.2fs, ratio: %3.2f" % (lenSpeech,ratioSpeech) )
+        print(("INF: analyseFile/Buf: lenSpeech: %5.2fs, ratio: %3.2f" % (lenSpeech,ratioSpeech) ))
         if 1:
             # debug: output just speech to a sound
             compData = self.generateSoundFromFlag( audiodata, s.nSamplingRate, aFlagVAD, window_step_in_sec )
@@ -322,5 +322,5 @@ class ElanGenerator:
             self.generateEafFile( "/tmp/t.eaf", aFlagVAD, window_step_in_sec, strFilename )
             
         aTs = self.generateTimeSegmentsFromFlag( aFlagVAD, window_step_in_sec )
-        print("INF: analyseFile/Buf: lenSpeech: %5.2fs, ratio: %3.2f, nbrSegment: %d" % (lenSpeech,ratioSpeech,len(aTs)) )
+        print(("INF: analyseFile/Buf: lenSpeech: %5.2fs, ratio: %3.2f, nbrSegment: %d" % (lenSpeech,ratioSpeech,len(aTs)) ))
         return aTs

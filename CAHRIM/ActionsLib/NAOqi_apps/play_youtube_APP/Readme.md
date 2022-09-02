@@ -1,4 +1,0 @@
-- Install google-api for python : sudo pip install --upgrade google-api-python-client
-- Install App-PlayYouTube.pml project (inside the folder App-PlayYouTube) on Pepper using Choregraphe
-- Touch Pepper robot to stop the music
-- The action only supports to search on Youtube

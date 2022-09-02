@@ -26,10 +26,10 @@ from random import randint
 import time
 import functools
 
-from action import Action
+from .action import Action
 from CahrimThreads.sensory_hub import OdomConverter
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 MEMORY_CHARGER = "CARESSES_onCharger"
 
@@ -235,11 +235,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip

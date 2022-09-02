@@ -26,9 +26,9 @@ import threading
 import math
 import sys
 sys.path.append("..")
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 from CahrimThreads.sensory_hub import DetectUserDepth, Person
 import time
 

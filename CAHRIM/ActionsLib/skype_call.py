@@ -34,9 +34,9 @@ import os
 import platform
 import webbrowser
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 ## Action "Skype Call".
 #
@@ -78,7 +78,7 @@ class SkypeCall(Action):
                 self.recipient_options.append(self.recipient_params["IDs"][id]["full"].encode('utf-8'))
 
         self.modes_params = self.loadParameters("call_modes.json")
-        self.modes_IDs = self.modes_params["IDs"].keys()
+        self.modes_IDs = list(self.modes_params["IDs"].keys())
         self.modes_options = self.getAllParametersAttributes(self.modes_params, self.modes_IDs, "full")
 
         # Initialize NAOqi services
@@ -170,7 +170,7 @@ class SkypeCall(Action):
             self.sp.monolog(self.topic_recipient, "0", tag=speech.TAGS[1])
 
         else:
-            raise Exception, "No Skype id nor phone number provided."
+            raise Exception("No Skype id nor phone number provided.")
 
         self.sp.monolog(self.topic_recipient, "6", tag=speech.TAGS[1])
 
@@ -264,11 +264,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -283,4 +283,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

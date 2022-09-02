@@ -24,7 +24,7 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 
 import time
 
-from caressestools import setAutonomousAbilities, fromAutonomousLifeToAwake, Settings, Language
+from .caressestools import setAutonomousAbilities, fromAutonomousLifeToAwake, Settings, Language
 
 SPEECH_RECO_EVENT = "Audio/RecognizedWords"
 
@@ -62,7 +62,7 @@ class TestAsr:
 
 		try:
 			while True:
-				print self.sMemory.getData(SPEECH_RECO_EVENT)
+				print(self.sMemory.getData(SPEECH_RECO_EVENT))
 				time.sleep(0.2)
 		except KeyboardInterrupt:
 			## Stop recognition
@@ -89,11 +89,11 @@ if __name__ == "__main__":
 		# Initialize qi framework.
 		session = qi.Session()
 		session.connect("tcp://" + args.ip + ":" + str(args.port))
-		print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+		print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
 	except RuntimeError:
-		print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+		print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
 		sys.exit(1)
 
 	t = TestAsr(session, args.useGoogleKey)

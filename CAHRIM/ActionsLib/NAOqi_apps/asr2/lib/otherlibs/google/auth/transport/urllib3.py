@@ -14,7 +14,7 @@
 
 """Transport adapter for urllib3."""
 
-from __future__ import absolute_import
+
 
 import logging
 

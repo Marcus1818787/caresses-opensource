@@ -14,10 +14,8 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
-class LanguageTools():
+class LanguageTools(metaclass=Singleton):
     #specify that LanguageTools is an instantiation of the metaclass Singleton
-    __metaclass__ = Singleton
-
     def __init__(self, session):
         self.session = session
         self.memory = self.session.service("ALMemory")
@@ -39,20 +37,20 @@ class LanguageTools():
 
         try:
             self.tts.loadVoicePreference( "NaoOfficialVoice" + strLang )
-        except BaseException, err:
+        except BaseException as err:
             logging.error( "Is lang %s unknown?" % str( strLang ) )
             logging.error( "%s" % str(err) )
             logging.info( "Trying a call to setLanguage" )
             try:
                 self.tts.setLanguage( strLang )
-            except BaseException, err:
+            except BaseException as err:
                 logging.error( "SetLanguage, error: %s" % str(err) )
             
             
         if( bChangeAsrAlso ):
             try:
                 self.asr.setLanguage( strLang )
-            except BaseException, err:
+            except BaseException as err:
                 logging.error( "asr.setLanguage, error: %s" % str(err) )
     # setSpeakLanguage - end
 
@@ -91,7 +89,7 @@ class LanguageTools():
             return 'pt'
 
         logging.warning( "Language %s is unknown" % strLang  )
-        raise (BaseException("Language %s is unknown" % strLang))
+        raise BaseException
 
 
     def fromLangAbbrev(self, strLangAbbrev ):
@@ -122,7 +120,7 @@ class LanguageTools():
             return "Portuguese"
 
         logging.warning( "Language abbrev %s is unknown" % str( strLangAbbrev ) )
-        raise( BaseException( "Language abbrev %s is unknown" % str( strLangAbbrev ) ))
+        raise BaseException
 
     def getSpeakLanguageAnsiCode(self, strLang ):
         """
@@ -143,7 +141,7 @@ class LanguageTools():
             return 'ja-JP'
 
         logging.warning( "Language %s is unknown" % str( strLang ) )
-        raise( BaseException( "Language %s is unknown" % str( strLang ) ))
+        raise BaseException
     # getSpeakLanguageAnsiCode - end    
         
 

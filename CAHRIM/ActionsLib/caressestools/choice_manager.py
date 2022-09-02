@@ -169,7 +169,7 @@ class ChoiceManager:
             assert answerList is not None
 
         except AssertionError:
-            print "Bad use of the method"
+            print("Bad use of the method")
             return
 
         self.memory.insertData( "isLoaded", "" )
@@ -268,8 +268,8 @@ if __name__ == "__main__":
     choice = ChoiceManager(args.ip)
     choice.setRepeatAnswer(True)
 
-    print choice.giveChoice("Are you ok ?", ["yes", "no"], confidence=0.45)
-    print choice.giveChoice("Am I a robot ?", ["yes", "no"], confidence=0.45)
+    print(choice.giveChoice("Are you ok ?", ["yes", "no"], confidence=0.45))
+    print(choice.giveChoice("Am I a robot ?", ["yes", "no"], confidence=0.45))
     # print choice.giveChoice("Hey, ça va ?", ["oui", "non"], confidence=0.45)
     # print choice.giveChoice("Quelle est ta couleur préférée ?", ["orange", "bleu", "rouge", "jaune"], confidence=0.45)
     # print choice.giveChoice("私はロボットですか?", ["はい", "いいえ"], confidence=0.45)

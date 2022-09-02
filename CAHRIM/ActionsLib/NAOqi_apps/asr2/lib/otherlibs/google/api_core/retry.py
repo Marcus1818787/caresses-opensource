@@ -54,7 +54,7 @@ a ``retry`` parameter that allows you to configure the behavior:
 
 """
 
-from __future__ import unicode_literals
+
 
 import datetime
 import functools

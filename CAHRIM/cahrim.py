@@ -22,7 +22,7 @@ Affiliation: Laboratorium, DIBRIS, University of Genova, Italy
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-import Queue
+import queue
 import socket
 import argparse
 import os
@@ -33,15 +33,15 @@ import qi.logging
 from threading import Event
 from colorama import init, deinit
 
-from ActionsLib.caressestools.caressestools import Settings, connectToPepper, startPepper, showImg, unloadImg, stopPepper, loadMap, TABLET_IMG_DEFAULT
-from CahrimThreads.socket_handlers import MsgReceiver, MsgSender, InputMsgHandler, OutputMsgHandler
-from CahrimThreads.actuation_hub import StateObserver
-from CahrimThreads.behaviour_pattern_estimator import BehaviourPatternEstimator
-from CahrimThreads.sensory_hub import DBObserver, OdomConverter, DetectUserDepth, EstimateUserEmotion
-from CahrimThreads.user_behaviour_analysis import ActivityAndLocationRecognition
+from .ActionsLib.caressestools.caressestools import Settings, connectToPepper, startPepper, showImg, unloadImg, stopPepper, loadMap, TABLET_IMG_DEFAULT
+from .CahrimThreads.socket_handlers import MsgReceiver, MsgSender, InputMsgHandler, OutputMsgHandler
+from .CahrimThreads.actuation_hub import StateObserver
+from .CahrimThreads.behaviour_pattern_estimator import BehaviourPatternEstimator
+from .CahrimThreads.sensory_hub import DBObserver, OdomConverter, DetectUserDepth, EstimateUserEmotion
+from .CahrimThreads.user_behaviour_analysis import ActivityAndLocationRecognition
 
-output_queue = Queue.Queue(maxsize=0)
-input_queue  = Queue.Queue(maxsize=0)
+output_queue = queue.Queue(maxsize=0)
+input_queue  = queue.Queue(maxsize=0)
 
 log_filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cahrimLog.log")
 logger = logging.getLogger('CAHRIM')

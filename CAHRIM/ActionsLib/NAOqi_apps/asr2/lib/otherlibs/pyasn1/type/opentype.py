@@ -57,13 +57,13 @@ class OpenType(object):
     # Python dict protocol
 
     def values(self):
-        return self.__typeMap.values()
+        return list(self.__typeMap.values())
 
     def keys(self):
-        return self.__typeMap.keys()
+        return list(self.__typeMap.keys())
 
     def items(self):
-        return self.__typeMap.items()
+        return list(self.__typeMap.items())
 
     def __contains__(self, key):
         return key in self.__typeMap

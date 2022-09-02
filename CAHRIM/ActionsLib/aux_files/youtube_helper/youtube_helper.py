@@ -24,9 +24,9 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from urlparse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs
 import isodate
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 
 DEVELOPER_KEY = 'AIzaSyCr-g1oTB-sOgydsCEUjhdNhZZdg6XoxoY'
@@ -64,8 +64,8 @@ class YoutubeHelper(object):
         headers = {'User-Agent': user_agent}
         url = YOUTUBE_EMBED_LINK % id
 
-        req = urllib2.Request(url, headers=headers)
-        f = urllib2.urlopen(req)
+        req = urllib.request.Request(url, headers=headers)
+        f = urllib.request.urlopen(req)
         html_doc = f.read()
 
         playable = re.search(r'playabilityStatus\\":{\\"status\\":\\"(.*)\\"}}', html_doc)
@@ -115,6 +115,6 @@ if __name__ == '__main__':
     # print yt.get_video_id("https://www.youtube.com/watch?v=hT_nvWreIhg")
     # print yt.get_video_id("hello")
     # print yt.search_video_id("Girls like you lyric")
-    print yt.get_video_duration('EmGFdalXd-w')
-    print yt.checkIfEmbeddable('EmGFdalXd-w')
-    print yt.checkIfPlayable('EmGFdalXd-w')
+    print(yt.get_video_duration('EmGFdalXd-w'))
+    print(yt.checkIfEmbeddable('EmGFdalXd-w'))
+    print(yt.checkIfPlayable('EmGFdalXd-w'))

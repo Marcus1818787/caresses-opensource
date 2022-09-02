@@ -28,10 +28,10 @@ import os
 import json
 import threading
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-import caressestools.multipage_choice_manager as mlt
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from . import caressestools.multipage_choice_manager as mlt
 
 TELEGRAM = "telegram"
 LINE = "line"
@@ -154,7 +154,7 @@ class TakeAndSendPicture(Action):
             answer = self.choice.giveChoiceMultiPage(choice_ready, option_ready)
             self.sp.gothread=False
 
-            answer = [unicode(answer[0], "utf-8"), answer[1]]
+            answer = [str(answer[0], "utf-8"), answer[1]]
             self.choice.kill()
             self.sp.checkIfKilledDuringMcm(self.choice, answer)
 
@@ -184,14 +184,14 @@ class TakeAndSendPicture(Action):
             self.sASR.stopReco()
 
             while not_understood and not self.is_stopped:
-                if any(unicode(keyword, "utf-8") in user_input.lower() for keyword in keywords_keep):
+                if any(str(keyword, "utf-8") in user_input.lower() for keyword in keywords_keep):
                     if not len(self.recipient_options) == 0:
                         send =self.sp.askYesOrNoQuestion(line_send, speech.TAGS[4], noisy=self.asr)
                         if send:
                             self.sendPicture()
                     take_another = self.sp.askYesOrNoQuestion(line_another, speech.TAGS[11], noisy=self.asr)
                     not_understood = False
-                elif any(unicode(keyword, "utf-8") in user_input.lower() for keyword in keywords_del):
+                elif any(str(keyword, "utf-8") in user_input.lower() for keyword in keywords_del):
                     pic = self.path_take % caressestools.DEF_IMG_APP
                     pic = pic + self.pic_file_name + "." + self.extension
                     self.delPicture(pic)
@@ -208,7 +208,7 @@ class TakeAndSendPicture(Action):
                         thr.start()
                     user_input = self.choice.giveChoiceMultiPage(choice_keep_delete, options_keep_del)
                     self.sp.gothread=False
-                    user_input = [unicode(user_input[0], "utf-8"), user_input[1]]
+                    user_input = [str(user_input[0], "utf-8"), user_input[1]]
                     self.choice.kill()
                     self.sp.checkIfKilledDuringMcm(self.choice, user_input)
                     user_input = user_input[0]
@@ -252,7 +252,7 @@ class TakeAndSendPicture(Action):
             send_via = self.choice.giveChoiceMultiPage(self.choice_mode, sending_ways)
             self.sp.gothread=False
 
-            send_via = [unicode(send_via[0], "utf-8"), send_via[1]]
+            send_via = [str(send_via[0], "utf-8"), send_via[1]]
             self.choice.kill()
             self.sp.checkIfKilledDuringMcm(self.choice, send_via)
             send_via = send_via[0]
@@ -304,11 +304,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -323,4 +323,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

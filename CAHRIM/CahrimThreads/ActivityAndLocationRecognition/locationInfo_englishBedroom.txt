@@ -1,4 +1,0 @@
-sensorNumber:locationName
-s1:Bed
-s2:Chair
-s3:Wardrobe

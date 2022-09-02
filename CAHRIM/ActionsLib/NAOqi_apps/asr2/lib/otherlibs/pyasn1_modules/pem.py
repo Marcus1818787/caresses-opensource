@@ -13,10 +13,8 @@ stSpam, stHam, stDump = 0, 1, 2
 # The markers parameters is in form ('start1', 'stop1'), ('start2', 'stop2')...
 # Return is (marker-index, substrate)
 def readPemBlocksFromFile(fileObj, *markers):
-    startMarkers = dict(map(lambda x: (x[1], x[0]),
-                            enumerate(map(lambda y: y[0], markers))))
-    stopMarkers = dict(map(lambda x: (x[1], x[0]),
-                           enumerate(map(lambda y: y[1], markers))))
+    startMarkers = dict([(x[1], x[0]) for x in enumerate([y[0] for y in markers])])
+    stopMarkers = dict([(x[1], x[0]) for x in enumerate([y[1] for y in markers])])
     idx = -1
     substrate = ''
     certLines = []

@@ -24,11 +24,11 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 
 import sys
 
-from action import Action
-from go_to import GoTo
-from react_to_sound import ReactToSound
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from .go_to import GoTo
+from .react_to_sound import ReactToSound
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 class KillCAHRIM(Exception):
     pass
@@ -112,11 +112,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip

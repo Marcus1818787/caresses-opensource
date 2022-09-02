@@ -103,7 +103,7 @@ class OdomConverter(Thread):
         if starting_node is None:
             log_oc.error("Starting node '%s' does not exist in the map." % startingNode)
             f.unloadCurrentWork(draw=False)
-            raise Exception, "Invalid starting node."
+            raise Exception("Invalid starting node.")
         else:
             OdomConverter.r0_mf = [starting_node.x * scale_factor, starting_node.y * scale_factor, math.radians(starting_node.th)] # robot in map-frame
             log_oc.info("Starting pose at node: %s" % startingNode)
@@ -315,18 +315,18 @@ class DetectUserDepth(Thread):
 
     def printPersonSituation(self):
         print("----------------------------")
-        print "People detected: " + str(len(self.perceived_people_list))
-        print "Faces detected: " + str(len(self.detected_faces))
+        print("People detected: " + str(len(self.perceived_people_list)))
+        print("Faces detected: " + str(len(self.detected_faces)))
         known_present_names = []
         for p in Person.getPresentKnownPersons():
             known_present_names.append(p.name)
-        print "Known people: " + str(len(Person.getPresentKnownPersons()))
-        print known_present_names
+        print("Known people: " + str(len(Person.getPresentKnownPersons())))
+        print(known_present_names)
         if len(self.perceived_people_list) >= len(Person.getPresentKnownPersons()):
             unknown = len(self.perceived_people_list) - len(Person.getPresentKnownPersons())
         else:
             unknown = 0
-        print "Unknown people: " + str(unknown)
+        print("Unknown people: " + str(unknown))
 
     @staticmethod
     def isUserApproached():
@@ -350,11 +350,11 @@ class DetectUserDepth(Thread):
         try:
             with open(file_path) as known_people_file:
                 known_people_dict = json.load(known_people_file)
-            for p_id in known_people_dict.keys():
+            for p_id in list(known_people_dict.keys()):
                 p = known_people_dict[p_id]
                 Person(p["name"].encode('utf-8'), p["family-name"].encode('utf-8'), p_id, p["naoqi-face-label"].encode('utf-8'))
         except Exception as e:
-            print e
+            print(e)
             log_dud.error("File 'knownPeopleList.json' not found at %s" % file_path + ". Ignoring face recognition.")
 
     @staticmethod

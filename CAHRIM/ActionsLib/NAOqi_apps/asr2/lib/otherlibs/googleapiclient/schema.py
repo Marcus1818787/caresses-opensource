@@ -56,7 +56,7 @@ For example, given the schema:
 
 The constructor takes a discovery document in which to look up named schema.
 """
-from __future__ import absolute_import
+
 
 import sys
 sys.path.append("/data/home/nao/.local/share/PackageManager/apps/asr2/lib/otherlibs/")

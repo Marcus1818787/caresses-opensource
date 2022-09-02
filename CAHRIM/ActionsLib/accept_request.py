@@ -24,10 +24,10 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 
 import qi
 import argparse
-import caressestools.caressestools as caressestools
-from action import Action
-from caressestools.input_request_parser import InputRequestParser
-from command_manager import CommandManager
+from . import caressestools.caressestools as caressestools
+from .action import Action
+from .caressestools.input_request_parser import InputRequestParser
+from .command_manager import CommandManager
 
 ## Action "AcceptRequest".
 #
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     session = qi.Session()
     session.connect("tcp://" + args.ip + ":" + str(args.port))
-    print 'Connected to Pepper'
+    print('Connected to Pepper')
     caressestools.Settings.robotIP = args.ip
     apar = ""
     cpar = "1.0 100 1.0 English Sonali 20 prayingGoal&&showVideoInstructionsGoal_boiledFish&&setReminderGoal_takingMedicine&&audioVideoCallGoal_grandChild"

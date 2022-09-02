@@ -27,8 +27,8 @@ import time
 import functools
 from threading import Timer
 
-from action import Action
-import caressestools.caressestools as caressestools
+from .action import Action
+from . import caressestools.caressestools as caressestools
 
 TEMPERATURE_IHOUSE_ROBOT = "caresses-ihouse-temperature"
 
@@ -87,8 +87,8 @@ class ReadTemperature(Action):
 
         except AssertionError:
             if language.lower() != "japanese":
-                print language + " is not supported by the robot, "\
-                    "language set to English"
+                print(language + " is not supported by the robot, "\
+                    "language set to English")
 
             self.tts.setLanguage("English")
 
@@ -104,7 +104,7 @@ class ReadTemperature(Action):
             assert volume >= 0 and volume <= 1
 
         except AssertionError:
-            print "Incorrect volume, 0.5 taken into account"
+            print("Incorrect volume, 0.5 taken into account")
             volume = 0.5
 
         self.tts.setVolume(volume)
@@ -137,7 +137,7 @@ class ReadTemperature(Action):
             value = self.input_queue.get()
             if value[0] == "provided" and value[1] == "iHouse":
                 data = str(int(round(float(value[2]))))
-                print "[Action - ReadTemperature] Temperature retrieved correctly with value: %s" % data
+                print("[Action - ReadTemperature] Temperature retrieved correctly with value: %s" % data)
                 break
             else:
                 self.input_queue.put(value)

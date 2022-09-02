@@ -28,9 +28,9 @@ import json
 import datetime
 from collections import OrderedDict
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 
 ## Action "Set Reminder"
@@ -101,13 +101,13 @@ class SetReminder(Action):
         if not self.isAvailable(self.reminder_id):
             self.reminder_full = custom_option
             try:
-                self.reminder_full_unicode=unicode(self.reminder_full,"utf-8")
+                self.reminder_full_unicode=str(self.reminder_full,"utf-8")
             except:
                 self.reminder_full_unicode=self.reminder_full
-            while self.reminder_full_unicode == unicode(custom_option,"utf-8"):
+            while self.reminder_full_unicode == str(custom_option,"utf-8"):
                 self.reminder_full = self.sp.dialog(self.__class__.__name__, self.reminder_options, checkValidity=False, askForConfirmation=True, noisy=self.asr)
                 try:
-                    self.reminder_full_unicode=unicode(self.reminder_full,"utf-8")
+                    self.reminder_full_unicode=str(self.reminder_full,"utf-8")
                 except:
                     self.reminder_full_unicode=self.reminder_full
 
@@ -189,11 +189,11 @@ class SetReminder(Action):
         with open(self.gen_rem_filename, "r") as f:
             content = json.load(f)
 
-        content = OrderedDict(sorted(content.items(), key=lambda t: t[0]))
+        content = OrderedDict(sorted(list(content.items()), key=lambda t: t[0]))
 
         key = None
 
-        for key in content.keys():
+        for key in list(content.keys()):
             key = key.encode('utf-8')
             if content[key]["full"] == "":
                 break
@@ -238,11 +238,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -258,4 +258,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

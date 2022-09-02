@@ -24,9 +24,9 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 import json
 import os
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 
 ## Action "Read Menu".
@@ -64,7 +64,7 @@ class ReadMenu(Action):
         with open(meal_conf) as f:
             self.meals = json.load(f)
 
-        self.meals_IDs = [m.encode('utf-8') for m in self.meals.keys() if not self.meals[m.encode('utf-8')] == []]
+        self.meals_IDs = [m.encode('utf-8') for m in list(self.meals.keys()) if not self.meals[m.encode('utf-8')] == []]
         self.meals_options = self.getAllParametersAttributes(self.meals_params, self.meals_IDs, "full")
 
         # Initialize NAOqi services
@@ -132,11 +132,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -151,4 +151,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

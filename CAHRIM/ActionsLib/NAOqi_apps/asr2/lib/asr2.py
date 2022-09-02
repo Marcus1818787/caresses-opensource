@@ -24,8 +24,8 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
 import qi
-from abcdk.AbcdkSoundReceiver.AbcdkSoundReceiver import AbcdkSoundReceiver
-from otherlibs.speech_recognition import Recognizer
+from .abcdk.AbcdkSoundReceiver.AbcdkSoundReceiver import AbcdkSoundReceiver
+from .otherlibs.speech_recognition import Recognizer
 import sys
 
 sys.path.append("/data/home/nao/.local/share/PackageManager/apps/asr2/lib/otherlibs/")
@@ -133,20 +133,20 @@ def register_as_service(service_class, robot_ip="127.0.1"):
     instance = service_class(session)
     try:
         service_id = session.registerService(service_name, instance)
-        print 'Successfully registered service: {}'.format(service_name)
+        print('Successfully registered service: {}'.format(service_name))
     except RuntimeError:
-        print '{} already registered, attempt re-register'.format(service_name)
+        print('{} already registered, attempt re-register'.format(service_name))
         for info in session.services():
             try:
                 if info['name'] == service_name:
                     session.unregisterService(info['serviceId'])
-                    print "Unregistered {} as {}".format(service_name,
-                                                         info['serviceId'])
+                    print("Unregistered {} as {}".format(service_name,
+                                                         info['serviceId']))
                     break
             except (KeyError, IndexError):
                 pass
         service_id = session.registerService(service_name, instance)
-        print 'Successfully registered service: {}'.format(service_name)
+        print('Successfully registered service: {}'.format(service_name))
 
     return service_id
 

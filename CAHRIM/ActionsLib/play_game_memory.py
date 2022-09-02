@@ -27,10 +27,10 @@ import json
 from random import randint
 import threading
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-import caressestools.multipage_choice_manager as mcm
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from . import caressestools.multipage_choice_manager as mcm
 
 ## Action "Play Game Memory".
 #
@@ -145,7 +145,7 @@ class PlayGameMemory(Action):
                 answer = self.mcm.giveChoiceMultiPage(question_tablet, options)
                 self.sp.gothread=False
 
-                answer = [unicode(answer[0], "utf-8"), answer[1]]
+                answer = [str(answer[0], "utf-8"), answer[1]]
                 self.sp.checkIfKilledDuringMcm(self.mcm, answer, self.end)
 
                 while not answer[0].lower() == correct_answer.lower():
@@ -157,7 +157,7 @@ class PlayGameMemory(Action):
                         thr.start()
                     answer = self.mcm.giveChoiceMultiPage(question_tablet, options)
                     self.sp.gothread=False
-                    answer = [unicode(answer[0], "utf-8"), answer[1]]
+                    answer = [str(answer[0], "utf-8"), answer[1]]
                     self.sp.checkIfKilledDuringMcm(self.mcm, answer, self.end)
 
                 self.sp.monolog(self.__class__.__name__, "4", tag=speech.TAGS[1])
@@ -206,11 +206,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -225,4 +225,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

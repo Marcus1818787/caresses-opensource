@@ -41,9 +41,9 @@ class DatabaseHelper(object):
         try:
             cursor.execute(INSERT_SQL.format(id=id))
         except sqlite3.IntegrityError as sql_ex:
-            print sql_ex
+            print(sql_ex)
         except Exception as ex:
-            print ex
+            print(ex)
         finally:
             self.db.commit()
 
@@ -52,7 +52,7 @@ class DatabaseHelper(object):
         try:
             cursor.execute(UPDATE_BY_ID.format(stop_seconds=stop_seconds, id=id))
         except Exception as ex:
-            print ex
+            print(ex)
         finally:
             self.db.commit()
 
@@ -70,9 +70,9 @@ class DatabaseHelper(object):
         cursor.execute(GET_ALL_SQL)
         all_rows = cursor.fetchall()
         if all_rows:
-            print all_rows
+            print(all_rows)
         else:
-            print 'No data'
+            print('No data')
 
     def get_start_seconds(self, id):
         target = self.get_by_id(id)

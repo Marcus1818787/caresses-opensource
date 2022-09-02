@@ -29,8 +29,8 @@ class LedsDcm:
             strLedName = "DCM";
         try:
             dcm = self.session.service( strLedName );
-        except Exception, err:
-            print( "ERR: getDCM_ProxyForLeds: can't connect to '%s'" % strLedName );
+        except Exception as err:
+            print(( "ERR: getDCM_ProxyForLeds: can't connect to '%s'" % strLedName ));
             dcm = None;
         return dcm;
     # getDCM_ProxyForLeds - end    
@@ -54,7 +54,7 @@ class LedsDcm:
         self.createAliases();
         # some memory for EyeCircle: 
         self.nEyeCircle_NextLedPosition = 0; # position of next led to lighten
-        self.tEyeCircle_timeNextSent = -sys.maxint; # time at when lighten this led (in dcm time)
+        self.tEyeCircle_timeNextSent = -sys.maxsize; # time at when lighten this led (in dcm time)
         self.EarsLoading_bLastLit = False; # a flip flop to make the blinking
         self.EarsLoading_nLastNbrEarToLit=-1; # last number to prevent erasing too much
         self.EarsLoading_timeLastCall = time.time()-1000;
@@ -112,11 +112,11 @@ class LedsDcm:
             self.dcm.createAlias( [strAliasName, self.eyesDeviceL] );
             strAliasName = strTemplateNameR % nIdxAngle;
             if( bVerbose ):
-                print( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (strAliasName,self.eyesDeviceR) );            
+                print(( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (strAliasName,self.eyesDeviceR) ));            
             self.dcm.createAlias( [ strAliasName, self.eyesDeviceR] );
             strAliasName = strTemplateName % nIdxAngle;
             if( bVerbose ):
-                print( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (strAliasName,self.eyesDevice) );
+                print(( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (strAliasName,self.eyesDevice) ));
             self.dcm.createAlias( [strAliasName, self.eyesDevice] );
         # for - end
         
@@ -128,7 +128,7 @@ class LedsDcm:
         self.strChestAliasName = "Chest";
         self.dcm.createAlias( [self.strChestAliasName, aChestDevice] );
         if( bVerbose ):
-            print( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (self.strChestAliasName,aChestDevice) );
+            print(( "DBG: leds.DcmMethod.createAliases: '%s' => %s" % (self.strChestAliasName,aChestDevice) ));
         
         # Creating Ears, EarL, EarR, Ears0, EarsL0, ...
         nNbrEarSegment = 10;
@@ -376,7 +376,7 @@ class LedsDcm:
         if( self.dcm == None ):
             self.reset();        
         allVal = self.getEyesState();
-        print( "current val: %s" % str( allVal ) );        
+        print(( "current val: %s" % str( allVal ) ));        
         riseTime = self.dcm.getTime(int(rTime*1000));
         commands = [];
         for j in range( 2 ):        
@@ -385,7 +385,7 @@ class LedsDcm:
                 commands.append( [[ allVal[j*8*3+((i+nDec)%8)*3+1], riseTime ]] );
                 commands.append( [[ allVal[j*8*3+((i+nDec)%8)*3+2], riseTime ]] );
             nDec *=-1; # invert direction after first eye
-        print( "commands: %s" % str( commands ) );
+        print(( "commands: %s" % str( commands ) ));
         self.dcm.setAlias( [self.eyesAliasName, "Merge",  "time-mixed", commands] );        
     # rotateEyes - end
     

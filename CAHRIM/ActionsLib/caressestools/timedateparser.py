@@ -190,7 +190,7 @@ class TimeDateParser():
         self._lang = lang.lower()
         self._conf = None
         self._loadConfFromFile("timedateparser_conf.json")
-        self._supported_languages = self._conf[WEEKDAY].keys()
+        self._supported_languages = list(self._conf[WEEKDAY].keys())
 
         assert self._lang in self._supported_languages, "Language '%s' is not supported." % self._lang
 
@@ -246,7 +246,7 @@ class TimeDateParser():
         else:
             conf = os.path.join(os.path.dirname(__file__), filename)
             if not os.path.isfile(conf):
-                raise Exception, "File cannot be found: %s" % filename
+                raise Exception("File cannot be found: %s" % filename)
         with open(conf) as f:
             self._conf = json.load(f)
 
@@ -847,7 +847,7 @@ class TimeDateParser():
         :rtype: str
         '''
         today = datetime.datetime.now()
-        return unicode(self.weekdayNumericToString(today.weekday() + 1),"utf-8")
+        return str(self.weekdayNumericToString(today.weekday() + 1),"utf-8")
 
     def getCurrentTime12(self):
         '''
@@ -890,12 +890,12 @@ if __name__ == '__main__':
     try:
         import sys
         while True:
-            line = raw_input("Write a date > ").decode(sys.stdin.encoding)
+            line = input("Write a date > ").decode(sys.stdin.encoding)
             date = tdp.getDate(line)
-            print date
-            line = raw_input("Write the time > ").decode(sys.stdin.encoding)
+            print(date)
+            line = input("Write the time > ").decode(sys.stdin.encoding)
             time = tdp.getTime(line)
-            print time
+            print(time)
     except KeyboardInterrupt:
         import sys
         sys.exit()

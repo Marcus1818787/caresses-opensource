@@ -92,6 +92,6 @@ class VocalEmotionEstimatorEngine():
             emotionProbabilities.sadness,
             emotionProbabilities.anger,
             emotionProbabilities.fear]
-            print self.emotion
+            print(self.emotion)
 
         voice.destroy()

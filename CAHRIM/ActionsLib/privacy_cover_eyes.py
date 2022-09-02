@@ -22,8 +22,8 @@ Affiliation: (1)(2) SoftBank Robotics, Paris, France, (3) Laboratorium, DIBRIS, 
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-from privacy  import Privacy
-import caressestools.caressestools as caressestools
+from .privacy  import Privacy
+from . import caressestools.caressestools as caressestools
 
 
 ## Action "Privacy Cover Eyes".
@@ -82,11 +82,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip

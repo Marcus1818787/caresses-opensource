@@ -29,7 +29,7 @@ import logging
 import sys
 
 from CahrimThreads.actuation_hub import Executor
-from sensory_hub import ESModule
+from .sensory_hub import ESModule
 
 log_mr = logging.getLogger('CAHRIM.SocketHandlers.MsgReceiver')
 log_ms = logging.getLogger('CAHRIM.SocketHandlers.MsgSender')

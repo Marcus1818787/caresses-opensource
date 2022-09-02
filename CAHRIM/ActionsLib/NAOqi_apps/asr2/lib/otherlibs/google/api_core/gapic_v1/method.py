@@ -39,7 +39,7 @@ def _apply_decorators(func, decorators):
     ``decorators`` may contain items that are ``None`` or ``False`` which will
     be ignored.
     """
-    decorators = filter(_is_not_none_or_false, reversed(decorators))
+    decorators = list(filter(_is_not_none_or_false, reversed(decorators)))
 
     for decorator in decorators:
         func = decorator(func)

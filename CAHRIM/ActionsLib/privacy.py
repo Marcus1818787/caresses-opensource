@@ -26,9 +26,9 @@ from math import pi
 import time
 import functools
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 
 ## Action "Privacy".

@@ -79,7 +79,7 @@ class NamedValues(object):
             self.__names[name] = number
             self.__numbers[number] = name
 
-        for name, number in kwargs.items():
+        for name, number in list(kwargs.items()):
             if name in self.__names:
                 raise error.PyAsn1Error('Duplicate name %s' % (name,))
 
@@ -104,7 +104,7 @@ class NamedValues(object):
                 number += 1
 
     def __repr__(self):
-        representation = ', '.join(['%s=%d' % x for x in self.items()])
+        representation = ', '.join(['%s=%d' % x for x in list(self.items())])
 
         if len(representation) > 64:
             representation = representation[:32] + '...' + representation[-32:]
@@ -130,7 +130,7 @@ class NamedValues(object):
         return dict(self) >= other
 
     def __hash__(self):
-        return hash(self.items())
+        return hash(list(self.items()))
 
     # Python dict protocol (read-only)
 

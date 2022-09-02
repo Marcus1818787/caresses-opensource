@@ -30,7 +30,7 @@ import logging
 import os
 from threading import Thread
 
-from sensory_hub import OdomConverter
+from .sensory_hub import OdomConverter
 
 from ActionsLib.action import Action
 from ActionsLib.action_fallback import Fallback, KillCAHRIM
@@ -254,7 +254,7 @@ class RunAction(Thread):
 
     def stopConflictingActions(self, conflicting_actions):
 
-        for id in thread_list.keys():
+        for id in list(thread_list.keys()):
             if not thread_list[id][1].type == self.type:
                 if thread_list[id][1].type in conflicting_actions:
                     thread_list[id][1].state = 'Finished'
@@ -267,7 +267,7 @@ class RunAction(Thread):
 
     def checkIfRunningAny(self, actions):
 
-        for id in thread_list.keys():
+        for id in list(thread_list.keys()):
             if not thread_list[id][1].type == self.type:
                 if thread_list[id][1].type in actions:
                     if thread_list[id][1].state == 'Running':
@@ -286,7 +286,7 @@ class RunAction(Thread):
 
         while not finished:
 
-            for id in thread_list.keys():
+            for id in list(thread_list.keys()):
                 if not thread_list[id][1].type == self.type:
                     if thread_list[id][1].type == action:
                         if thread_list[id][1].state == 'Running':
@@ -338,7 +338,7 @@ class StateObserver(Thread):
             ## Sending state message
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S.000", time.localtime())
             actions_state = ""
-            for id in thread_list.keys():
+            for id in list(thread_list.keys()):
                 actions_state += '(' + str(id) + ' ' + str(thread_list[id][1].state) + ')'
 
             gpos = OdomConverter.getRobotInMap()
@@ -350,13 +350,13 @@ class StateObserver(Thread):
             information_message = '[{(robot pepper-1)(time %s)(gpos %.2f %.2f %.2f)(spos %s)(act {%s})}]' % parse
             self.output_handler.writeSupplyMessage("publish", "D6.3", information_message)
 
-            for id in thread_list.keys():
+            for id in list(thread_list.keys()):
                 if 'Finished' in thread_list[id][1].state or 'Failed' in thread_list[id][1].state:
                     self.no_actions_yet = False
                     del thread_list[id]
 
             ## Fallback solution if no more actions are received by CSPEM
-            if thread_list.keys() == []:
+            if list(thread_list.keys()) == []:
 
                 if not self.nothing_running_timer_started:
                     if not self.no_actions_yet:
@@ -402,7 +402,7 @@ class StateObserver(Thread):
 
     def stop(self):
         self.alive = False
-        for id in thread_list.keys():
+        for id in list(thread_list.keys()):
             StopAction(thread_list[id][0], id).start()
 
 

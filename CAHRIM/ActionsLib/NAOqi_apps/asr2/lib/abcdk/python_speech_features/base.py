@@ -1,8 +1,8 @@
 # calculate filterbank features. Provides e.g. fbank and mfcc features for use in ASR applications
 # Author: James Lyons 2012
-from __future__ import division
+
 import numpy
-import sigproc
+from . import sigproc
 
 def numpyDCT(y, axis=-1):
     # 1D DCT Type-II
@@ -34,7 +34,7 @@ def numpyDCT2(y,axis=-1):
         
     if 1:
         #ortho norm
-        print N
+        print(N)
         b = b*numpy.sqrt(1/(N))
 
     return b    

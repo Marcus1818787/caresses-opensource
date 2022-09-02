@@ -29,8 +29,9 @@ __version__ = "3.8.1"
 __license__ = "BSD"
 
 try:  # attempt to use the Python 2 modules
-    from urllib import urlencode
-    from urllib2 import Request, urlopen, URLError, HTTPError
+    from urllib.parse import urlencode
+    from urllib.request import Request, urlopen
+    from urllib.error import URLError, HTTPError
 except ImportError:  # use the Python 3 modules
     from urllib.parse import urlencode
     from urllib.request import Request, urlopen
@@ -202,7 +203,7 @@ class AudioFile(AudioSource):
     """
 
     def __init__(self, filename_or_fileobject):
-        assert isinstance(filename_or_fileobject, (type(""), type(u""))) or hasattr(filename_or_fileobject, "read"), "Given audio file must be a filename string or a file-like object"
+        assert isinstance(filename_or_fileobject, (type(""), type(""))) or hasattr(filename_or_fileobject, "read"), "Given audio file must be a filename string or a file-like object"
         self.filename_or_fileobject = filename_or_fileobject
         self.stream = None
         self.DURATION = None
@@ -768,7 +769,7 @@ class Recognizer(AudioSource):
         """
         assert isinstance(audio_data, AudioData), "``audio_data`` must be audio data"
         assert isinstance(language, str) or (isinstance(language, tuple) and len(language) == 3), "``language`` must be a string or 3-tuple of Sphinx data file paths of the form ``(acoustic_parameters, language_model, phoneme_dictionary)``"
-        assert keyword_entries is None or all(isinstance(keyword, (type(""), type(u""))) and 0 <= sensitivity <= 1 for keyword, sensitivity in keyword_entries), "``keyword_entries`` must be ``None`` or a list of pairs of strings and numbers between 0 and 1"
+        assert keyword_entries is None or all(isinstance(keyword, (type(""), type(""))) and 0 <= sensitivity <= 1 for keyword, sensitivity in keyword_entries), "``keyword_entries`` must be ``None`` or a list of pairs of strings and numbers between 0 and 1"
 
         # import the PocketSphinx speech recognition module
         try:
@@ -935,7 +936,7 @@ class Recognizer(AudioSource):
             try: json.loads(credentials_json)
             except Exception: raise AssertionError("``credentials_json`` must be ``None`` or a valid JSON string")
         assert isinstance(language, str), "``language`` must be a string"
-        assert preferred_phrases is None or all(isinstance(preferred_phrases, (type(""), type(u""))) for preferred_phrases in preferred_phrases), "``preferred_phrases`` must be a list of strings"
+        assert preferred_phrases is None or all(isinstance(preferred_phrases, (type(""), type(""))) for preferred_phrases in preferred_phrases), "``preferred_phrases`` must be a list of strings"
 
         # See https://cloud.google.com/speech/reference/rest/v1/RecognitionConfig
         flac_data = audio_data.get_flac_data(

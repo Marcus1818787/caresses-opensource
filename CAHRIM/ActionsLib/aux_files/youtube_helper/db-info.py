@@ -42,7 +42,7 @@ def total_rows(cursor, table_name, print_out=False):
     cursor.execute('SELECT COUNT(*) FROM {}'.format(table_name))
     count = cursor.fetchall()
     if print_out:
-        print('\nTotal rows: {}'.format(count[0][0]))
+        print(('\nTotal rows: {}'.format(count[0][0])))
     return count[0][0]
 
 
@@ -78,8 +78,8 @@ def values_in_col(cursor, table_name, print_out=True):
         col_dict[col] = number_rows
     if print_out:
         print("\nNumber of entries per column:")
-        for i in col_dict.items():
-            print('{}: {}'.format(i[0], i[1]))
+        for i in list(col_dict.items()):
+            print(('{}: {}'.format(i[0], i[1])))
     return col_dict
 
 

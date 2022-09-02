@@ -84,7 +84,7 @@ try:
     with open(fname) as f:
         gkey = f.read()
 except:
-    print("ERROR: File not found - %s" % fname)
+    print(("ERROR: File not found - %s" % fname))
 
 ########################################################################################################################
 
@@ -220,17 +220,17 @@ def connectToPepper(pepperIP, pepperPort):
     @return NAOqi session
     '''
     try:
-        print 'Connecting to Pepper...'
+        print('Connecting to Pepper...')
         session = qi.Session()
         session.connect("tcp://" + pepperIP + ":" + str(pepperPort))
-        print("Connected to Naoqi at ip \"" + pepperIP + "\" on port " + str(pepperPort) + ".\n")
+        print(("Connected to Naoqi at ip \"" + pepperIP + "\" on port " + str(pepperPort) + ".\n"))
 
         return session
 
     except Exception as e:
-        print e.message
-        print ("Can't connect to Naoqi at ip \"" + pepperIP + "\" on port " + str(pepperPort) + ".\n"
-                "Please check your script arguments. Run with -h option for help.")
+        print(e.message)
+        print(("Can't connect to Naoqi at ip \"" + pepperIP + "\" on port " + str(pepperPort) + ".\n"
+                "Please check your script arguments. Run with -h option for help."))
         exit(2)
 
 
@@ -374,7 +374,7 @@ def preloadImg(session, image_state):
         found = True
     except Exception as err:
         found = False
-        print("Error during preLoadImage : %s " % err)
+        print(("Error during preLoadImage : %s " % err))
 
     sMemory.insertData("CARESSES_" + image_state + "_found", found)
 
@@ -429,8 +429,8 @@ def setRobotLanguage(session, language):
 
     except AssertionError:
         if language.lower() == "indian":
-            print language + " is not supported by the robot, " \
-                "language set to English"
+            print(language + " is not supported by the robot, " \
+                "language set to English")
 
             tts.setLanguage("English")
 
@@ -449,7 +449,7 @@ def setVoiceVolume(session, volume):
         assert volume >= 0 and volume <= 1
 
     except AssertionError:
-        print "Incorrect volume, 0.5 taken into account"
+        print("Incorrect volume, 0.5 taken into account")
         volume = 0.5
 
     tts.setVolume(volume)
@@ -469,7 +469,7 @@ def setVoiceSpeed(session, speed):
         assert speed >= 50 and speed <= 400
 
     except AssertionError:
-        print "Incorrect voice speed, resetting to the default speed"
+        print("Incorrect voice speed, resetting to the default speed")
         speed = 100
 
     tts.setParameter("speed", speed)
@@ -490,7 +490,7 @@ def setVoicePitch(session, pitch):
         tts.setParameter("pitchShift", pitch)
 
     except AssertionError:
-        print "Incorrect pitch value, the pitch won't be modified"
+        print("Incorrect pitch value, the pitch won't be modified")
 
 
 def generatePauseInSentence(speech, commaDuration=300, endSentenceDuration=800):
@@ -548,7 +548,7 @@ def setTabletVolume(session, volume):
         assert volume >= 0 and volume <= 15
 
     except AssertionError:
-        print "Incorrect volume, 15 taken into account"
+        print("Incorrect volume, 15 taken into account")
         volume = 15
 
     tab.setVolume(volume)
@@ -572,10 +572,10 @@ def loadMap():
             with open(map_info_file, "r") as mif:
                 content = mif.readlines()
             map_name = content[0]
-            print("CAHRIM is currently using map " + Fore.GREEN + map_name)
-            change = raw_input("Do you want to change the map? (y/n) > ")
+            print(("CAHRIM is currently using map " + Fore.GREEN + map_name))
+            change = input("Do you want to change the map? (y/n) > ")
             while not change.lower() in ["y", "n"]:
-                change = raw_input("Do you want to change the map? (y/n) > ")
+                change = input("Do you want to change the map? (y/n) > ")
             change = change.lower() == "y"
         else:
             print("No info about the map currently used.")
@@ -594,7 +594,7 @@ def loadMap():
             "There are no maps to load. Please put one or more map files inside 'CAHRIM/ActionsLib/aux_files/go_to/maps/' and select one when prompted after launching CAHRIM.")
             return False
         elif len(all_maps) == 1:
-            print("Selecting the only map found in the folder: %s" % all_maps[0])
+            print(("Selecting the only map found in the folder: %s" % all_maps[0]))
             map_index = 0
         else:
             sure = False
@@ -602,23 +602,23 @@ def loadMap():
                 print(
                 "Please enter the index (the number in brackets) corresponding to the map that you want to load. Press 'q' to quit.")
                 for index, m in enumerate(all_maps):
-                    print("[%2d]  %s" % ((index + 1), m))
-                answer = raw_input("Enter the index > ")
+                    print(("[%2d]  %s" % ((index + 1), m)))
+                answer = input("Enter the index > ")
                 if answer.lower() == 'q':
                     return False
                 else:
                     map_index = int(answer) - 1
-                    answer_sure = raw_input(
+                    answer_sure = input(
                         "Are you sure you want to load the map '%s'? (y/n) > " % all_maps[map_index])
                     sure = answer_sure.lower() == "y"
                 while not map_index in range(len(all_maps)):
                     print("ERROR: Invalid index! Please, try again.")
-                    answer = raw_input("Enter the index > ")
+                    answer = input("Enter the index > ")
                     if answer.lower() == 'q':
                         return False
                     else:
                         map_index = int(answer) - 1
-                        answer_sure = raw_input(
+                        answer_sure = input(
                             "Are you sure you want to load the map '%s'? (y/n) > " % all_maps[map_index])
                         sure = answer_sure.lower() == "y"
 

@@ -25,12 +25,12 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 
 import functools
 import time
-from aux_files.youtube_helper.youtube_helper import YoutubeHelper
-from aux_files.youtube_helper.db_helper import DatabaseHelper
+from .aux_files.youtube_helper.youtube_helper import YoutubeHelper
+from .aux_files.youtube_helper.db_helper import DatabaseHelper
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 ASR_SERVICE = "Caresses_PlayMusic_ASR"
 PLAY_YOUTUBE_ROBOT = "caresses-play-youtube"
@@ -124,14 +124,14 @@ class YouTubeNormal(Action):
             if not self.isAvailable(self.video_id):
                 self.video_full = custom_option
                 try:
-                    self.video_full_unicode=unicode(self.video_full,"utf-8")
+                    self.video_full_unicode=str(self.video_full,"utf-8")
                 except:
                     self.video_full_unicode=self.video_full
-                while self.video_full_unicode == unicode(custom_option,"utf-8"):
+                while self.video_full_unicode == str(custom_option,"utf-8"):
                     self.video_full = self.sp.dialog(self.__class__.__name__, self.options,
                                                      checkValidity=False, askForConfirmation=True, noisy=self.asr)
                     try:
-                        self.video_full_unicode=unicode(self.video_full,"utf-8")
+                        self.video_full_unicode=str(self.video_full,"utf-8")
                     except:
                         self.video_full_unicode=self.video_full
                 self.video_id = self.getIDFromAttribute(self.params, "full", self.video_full)

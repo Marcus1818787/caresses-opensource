@@ -119,7 +119,7 @@ class Page(object):
         """The :class:`Page` is an iterator of items."""
         return self
 
-    def next(self):
+    def __next__(self):
         """Get the next value in the page."""
         item = six.next(self._item_iter)
         result = self._item_to_value(self._parent, item)

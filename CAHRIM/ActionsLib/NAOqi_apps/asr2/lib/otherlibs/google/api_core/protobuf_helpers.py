@@ -58,7 +58,7 @@ def check_oneof(**kwargs):
     if not kwargs:
         return
 
-    not_nones = [val for val in kwargs.values() if val is not None]
+    not_nones = [val for val in list(kwargs.values()) if val is not None]
     if len(not_nones) > 1:
         raise ValueError('Only one of {fields} should be set.'.format(
             fields=', '.join(sorted(kwargs.keys())),
@@ -184,7 +184,7 @@ def _set_field_on_message(msg, key, value):
                 getattr(msg, key).extend([item])
     elif isinstance(value, collections.Mapping):
         # Assign the dictionary values to the protobuf message.
-        for item_key, item_value in value.items():
+        for item_key, item_value in list(value.items()):
             set(getattr(msg, key), item_key, item_value)
     elif isinstance(value, Message):
         getattr(msg, key).CopyFrom(value)

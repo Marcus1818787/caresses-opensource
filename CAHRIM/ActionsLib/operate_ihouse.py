@@ -23,10 +23,10 @@ Affiliation: (1) Robotics Laboratory, Japan Advanced Institute of Science and Te
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-import caressestools.multipage_choice_manager as mlt
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from . import caressestools.multipage_choice_manager as mlt
 import timeit
 
 class OperateiHouse(Action):
@@ -126,7 +126,7 @@ class OperateiHouse(Action):
                 self.sp.say(self.sp.script[self.__class__.__name__]["evaluation"]["1"][self.language].encode('utf-8'))
 
         if not self.isAvailable(self.operation):
-            available_operations = [self.items_params["IDs"][self.item_id]["operations"][op].encode('utf-8') for op in self.items_params["IDs"][self.item_id]["operations"].keys() if not op == status_str]
+            available_operations = [self.items_params["IDs"][self.item_id]["operations"][op].encode('utf-8') for op in list(self.items_params["IDs"][self.item_id]["operations"].keys()) if not op == status_str]
             ## 1 - by automatically choosing the single possible one
             if len(available_operations) == 1:
                 operation_str = available_operations[0]
@@ -146,7 +146,7 @@ class OperateiHouse(Action):
                 choice.kill()
                 answer = True
 
-            for k in self.items_params["IDs"][self.item_id]["operations"].keys():
+            for k in list(self.items_params["IDs"][self.item_id]["operations"].keys()):
                 if self.items_params["IDs"][self.item_id]["operations"][k].encode('utf-8') == operation_str:
                     self.operation = k
                     break
@@ -208,7 +208,7 @@ class OperateiHouse(Action):
                 elif data == "close":
                     status_str = self.items_params["IDs"][self.item_id]["status"]["close"]
                 elif data == "operation-fail":
-                    raise Exception, "iHouse, operation fail..."
+                    raise Exception("iHouse, operation fail...")
                 else:
                     unit = self.items_params["IDs"][self.item_id]["status"]["value"]["unit"]
                     format_str = self.items_params["IDs"][self.item_id]["status"]["value"]["format"]
@@ -261,7 +261,7 @@ class OperateiHouse(Action):
                     self.logger.info("%s correctly set to value: %s" % (msg_type_id, operation))
                     self.logger.info("%s correctly set with time: %s sec" % (msg_type_id, str(toc-tic)))
                 elif data == "operation-fail":
-                    raise Exception, "iHouse, operation fail..."
+                    raise Exception("iHouse, operation fail...")
                 break
             else:
                 self.input_queue.put(value)
@@ -271,7 +271,7 @@ class OperateiHouse(Action):
     def getAllControllableDevices(self, parameters, ordered_IDs, attribute):
         attributes = []
         for id in ordered_IDs:
-            if "operations" in parameters["IDs"][id].keys():
+            if "operations" in list(parameters["IDs"][id].keys()):
                 attributes.append(parameters["IDs"][id][attribute].encode('utf-8'))
         return attributes
 
@@ -281,7 +281,7 @@ if __name__ == "__main__":
     import qi
     import sys
     import socket
-    import Queue
+    import queue
     import traceback
     from threading import Event
     from CahrimThreads.socket_handlers import MsgReceiver, MsgSender, InputMsgHandler, OutputMsgHandler
@@ -299,17 +299,17 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
 
-    output_queue = Queue.Queue(maxsize=0)
-    input_queue  = Queue.Queue(maxsize=0)
+    output_queue = queue.Queue(maxsize=0)
+    input_queue  = queue.Queue(maxsize=0)
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -335,15 +335,15 @@ if __name__ == "__main__":
     for t in threads:
         t.start()
         t_name = t.id if hasattr(t, "id") else t.__class__.__name__
-        print ("%s started." % t_name)
+        print(("%s started." % t_name))
 
     print("-----------------------------------------------\n"
           " ===> All threads started.\n"
           "-----------------------------------------------\n")
     
     # Run Action
-    apar = u'iHouseAir-conditioner livingroom on'
-    cpar = u'0.7 80 1.0 english chouSan iHouseAir-conditioner'
+    apar = 'iHouseAir-conditioner livingroom on'
+    cpar = '0.7 80 1.0 english chouSan iHouseAir-conditioner'
 
     param = [apar, cpar, session, output_handler, input_queue, provided_event]
     action_class = getattr(sys.modules[__name__], 'OperateiHouse')

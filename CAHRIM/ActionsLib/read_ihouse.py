@@ -23,9 +23,9 @@ Affiliation: (1) Robotics Laboratory, Japan Advanced Institute of Science and Te
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 import timeit
 
 class ReadiHouse(Action):
@@ -150,7 +150,7 @@ class ReadiHouse(Action):
                 elif data == "close":
                     status_str = self.items_params["IDs"][self.item_id]["status"]["close"]
                 elif data == "operation-fail":
-                    raise Exception, "iHouse, operation fail..."
+                    raise Exception("iHouse, operation fail...")
                 else:
                     unit = self.items_params["IDs"][self.item_id]["status"]["value"]["unit"]
                     format_str = self.items_params["IDs"][self.item_id]["status"]["value"]["format"]
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     import time
     import sys
     import socket
-    import Queue
+    import queue
     import traceback
     from threading import Event
     from CahrimThreads.socket_handlers import MsgReceiver, MsgSender, InputMsgHandler, OutputMsgHandler
@@ -187,17 +187,17 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
 
-    output_queue = Queue.Queue(maxsize=0)
-    input_queue  = Queue.Queue(maxsize=0)
+    output_queue = queue.Queue(maxsize=0)
+    input_queue  = queue.Queue(maxsize=0)
 
     # Create a TCP/IP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     for t in threads:
         t.start()
         t_name = t.id if hasattr(t, "id") else t.__class__.__name__
-        print ("%s started." % t_name)
+        print(("%s started." % t_name))
 
     print("-----------------------------------------------\n"
           " ===> All threads started.\n"

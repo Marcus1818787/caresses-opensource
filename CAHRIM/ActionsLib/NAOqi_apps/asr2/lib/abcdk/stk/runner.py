@@ -16,7 +16,7 @@ __email__ = 'ekroeger@aldebaran.com'
 
 import sys
 import qi
-import logging
+from . import logging
 from distutils.version import LooseVersion
 
 #
@@ -41,7 +41,7 @@ def get_robot_name():
         strRet = filetools.getFileFirstLine( '/etc/hostname', bQuiet = True )
         if( strRet != "" ):
             return strRet
-    except BaseException, err:
+    except BaseException as err:
         logging.error(str(err))
     return "computer" # error case
 
@@ -98,13 +98,13 @@ def is_on_nao():
     try:
         try:
             value = mem.getData( "HAL/Robot/Type" )
-        except BaseException, err:
+        except BaseException as err:
             logging.error(str(err))
             logging.error("Is the version of naoqi less than 1.14 ?")
             value = "nao" # forcing to be on nao, because version  prior to 1.14 are all just for nao (and we've already check we're on a robot)
         if( value.lower() == "nao" ):
             return True
-    except BaseException, err:
+    except BaseException as err:
         logging.error(str(err))
     return False
 
@@ -115,7 +115,7 @@ def is_on_romeo(qiapp):
     mem = qiapp.session.service( "ALMemory" )
     try:
         value = mem.getData( "HAL/Robot/Type" )
-    except BaseException, err:
+    except BaseException as err:
         logging.error(str(err))
         logging.error("Is the version version <1.14? Or is Romeo not well configurated?")
         value = get_robot_name() # we wish to have romeo in the hostname of any of our beta romeo
@@ -127,7 +127,7 @@ def is_on_pepper():
     mem = naoqitools.myGetProxy( "ALMemory" )
     try:
         value = mem.getData( "HAL/Robot/Type" )
-    except BaseException, err:
+    except BaseException as err:
         logging.error(str(err))
         logging.error("Is version less than 1.14 ?")
         return False
@@ -139,18 +139,18 @@ def get_debug_robot():
         import qiq.config
         qiqrobot = qiq.config.defaultHost()
         if qiqrobot:
-            robot = raw_input(
+            robot = input(
                 "connect to which robot? (default is {0}) ".format(qiqrobot))
             if robot:
                 return robot
             else:
                 return qiqrobot
         else:
-            print "qiq found, but it has no default robot configured."
+            print("qiq found, but it has no default robot configured.")
     except ImportError:
         # qiq not installed
-        print "qiq not installed (you can use it to set a default robot)."
-    return raw_input("connect to which robot? ")
+        print("qiq not installed (you can use it to set a default robot).")
+    return input("connect to which robot? ")
 
 
 def init(qi_url=None,parser=None):
@@ -163,7 +163,7 @@ def init(qi_url=None,parser=None):
         if bool(args.qi_url):
             qi_url = args.qi_url
         elif not is_on_robot():
-            print "no --qi-url parameter given; interactively getting debug robot."
+            print("no --qi-url parameter given; interactively getting debug robot.")
             debug_robot = get_debug_robot()
             if debug_robot:
                 sys.argv.extend(["--qi-url", debug_robot])
@@ -210,7 +210,7 @@ def register_activity(activity_class, service_name, qiapp,args=None):
                     if hasattr(activity, "logger"):
                         activity.logger.error(msg)
                     else:
-                        print msg
+                        print(msg)
                 finally:
                     qiapp.stop()
         qi.async(activity.on_start).addCallback(handle_on_start_done)

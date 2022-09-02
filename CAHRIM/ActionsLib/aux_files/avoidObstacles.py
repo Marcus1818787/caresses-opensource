@@ -64,9 +64,9 @@ class ObstacleDetection(object):
                     self.Forward(0.1)
                 self.Stop_Move()
                 endRobotPosition = almath.Pose2D(self.motion.getRobotPosition(useSensorValues))
-                print endRobotPosition
+                print(endRobotPosition)
                 positionDiff = endRobotPosition.diff(initRobotPosition)
-                print positionDiff
+                print(positionDiff)
                 self.Rotate_To(positionDiff.theta)
                 return 1
             
@@ -79,9 +79,9 @@ class ObstacleDetection(object):
                     self.Forward(0.1)
                 self.Stop_Move()
                 endRobotPosition = almath.Pose2D(self.motion.getRobotPosition(useSensorValues))
-                print endRobotPosition
+                print(endRobotPosition)
                 positionDiff = endRobotPosition.diff(initRobotPosition)
-                print positionDiff.theta
+                print(positionDiff.theta)
                 self.Rotate_To(positionDiff.theta)
                 return 1
         else:
@@ -156,8 +156,8 @@ if __name__ == "__main__":
     try:
         session.connect("tcp://" + args.ip + ":" + str(args.port))
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
-               "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
+               "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     apar = float(0.6)
@@ -169,5 +169,5 @@ if __name__ == "__main__":
             action.Obstacle_avoidance()
             action.Forward(0.2)
     except KeyboardInterrupt:
-        print "Interrupted"
+        print("Interrupted")
         action.Stop_Move()

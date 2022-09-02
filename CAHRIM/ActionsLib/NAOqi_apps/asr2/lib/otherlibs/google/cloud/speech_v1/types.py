@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
+
 import sys
 
 from google.api_core.protobuf_helpers import get_messages
@@ -39,7 +39,7 @@ for module in (
         timestamp_pb2,
         status_pb2,
 ):
-    for name, message in get_messages(module).items():
+    for name, message in list(get_messages(module).items()):
         message.__module__ = 'google.cloud.speech_v1.types'
         setattr(sys.modules[__name__], name, message)
         names.append(name)

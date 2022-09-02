@@ -5,7 +5,7 @@ def playSound( strFilename, bWait = True, bDirectPlay = False, nSoundVolume = 10
     "nSoundVolume: [0..100] will play the sound with a specific volume (ndev on some version, and if using bDirectPlay )"
     "bUseLedEars: do a a circleLedEars"
     
-    print( "playSound( '%s', bWait = %s, bDirectPlay = %s, nSoundVolume = %d )" % ( strFilename, str( bWait ), str( bDirectPlay ), nSoundVolume ) )
+    print(( "playSound( '%s', bWait = %s, bDirectPlay = %s, nSoundVolume = %d )" % ( strFilename, str( bWait ), str( bDirectPlay ), nSoundVolume ) ))
     
     if( config.bRemoveDirectPlay ):
         print( "WRN: DISABLING_DIRECTPLAY SETTINGS for testing/temporary purpose" )
@@ -39,7 +39,7 @@ def playSound( strFilename, bWait = True, bDirectPlay = False, nSoundVolume = 10
                 # and another path
                 strSoundFile = pathtools.getABCDK_Path() + "data/wav/" + strFilename
             if( not filetools.isFileExists( strSoundFile ) ):
-                print( "ERR: appu.playSound: can't find file '%s'" % strFilename )
+                print(( "ERR: appu.playSound: can't find file '%s'" % strFilename ))
                 return False
 
         setUsingAudioOut( True )
@@ -57,8 +57,8 @@ def playSound( strFilename, bWait = True, bDirectPlay = False, nSoundVolume = 10
                         global_proxyAudioPlayer.playFile( strSoundFile, nSoundVolume / 100., 0. )
                     else:
                         global_proxyAudioPlayer.post.playFile( strSoundFile, nSoundVolume / 100., 0. )
-                except BaseException, err:
-                    print( "DBG: sound.playSound: this version can't handle volume? (err:%s)" % str(err) )    
+                except BaseException as err:
+                    print(( "DBG: sound.playSound: this version can't handle volume? (err:%s)" % str(err) ))    
                     if( bWait ):
                         global_proxyAudioPlayer.playFile( strSoundFile )
                     else:
@@ -66,9 +66,9 @@ def playSound( strFilename, bWait = True, bDirectPlay = False, nSoundVolume = 10
                     
         analyseSound_resume( bWait )
         setUsingAudioOut( False )
-    except BaseException, err:
+    except BaseException as err:
         debug.debug( "playSound: ERR: " + str( err ) )
-        print( "errr: " + str( err ) )
+        print(( "errr: " + str( err ) ))
         
     if bUseLedEars:
         if( system.isOnRomeo() ):
@@ -142,7 +142,7 @@ def getCurrentMasterVolume():
 def volumeFadeOut( rApproxTime = 1. ):
     "Fade out master sound system"
     nVol = getCurrentMasterVolume()
-    print( "volumeFadeOut: %d -----> 0" % nVol )
+    print(( "volumeFadeOut: %d -----> 0" % nVol ))
     nCpt = 0
     nApproximateCall = 20
     while( nVol > 0 and nCpt < 30 ): # when concurrent calls are made with other fade type, it could go to a dead lock. because getCurrentMasterVolume take some time, we prefere to add some counter
@@ -160,7 +160,7 @@ def volumeFadeOut( rApproxTime = 1. ):
 def volumeFadeIn( nFinalVolume, rApproxTime = 1. ):
     "Fade in master sound system"
     nVol = getCurrentMasterVolume()
-    print( "volumeFadeIn: %d -----> %d" % ( nVol, nFinalVolume ) )
+    print(( "volumeFadeIn: %d -----> %d" % ( nVol, nFinalVolume ) ))
     nCpt = 0
     nApproximateCall = 20
     while( nVol < nFinalVolume and nCpt < 30 ): # when concurrent calls are made with other fade type, it could go to a dead lock. because getCurrentMasterVolume take some time, we prefere to add some counter
@@ -207,8 +207,8 @@ def setMasterPanning( nPanning = 0 ):
         system.mySystemCall( "amixer -q sset Master %d,%d" % ( nCoefL, nCoefR ) )
         system.mySystemCall( "amixer -q sset PCM 25" )
         system.mySystemCall( "amixer -q sset \"Master Mono\" 32" )
-    except BaseException, err:
-        print( "setMasterPanning: error '%s'" % str( err ) )
+    except BaseException as err:
+        print(( "setMasterPanning: error '%s'" % str( err ) ))
 # setMasterPanning - end
 
  # pause music
@@ -248,8 +248,8 @@ def getMasterVolume( bForceSystemCall = False ):
             nVal = ad.getOutputVolume()
             debug.debug( "getMasterVolume: %d%%" % ( nVal ) )
             return nVal
-        except BaseException, err:
-            print( "getMasterVolume: error '%s'" % str( err ) )
+        except BaseException as err:
+            print(( "getMasterVolume: error '%s'" % str( err ) ))
         
     print( "WRN: => using old one using fork and shell!" )
   
@@ -278,8 +278,8 @@ def setMasterVolume( nVolPercent, bForceSystemCall = False ):
             ad = naoqitools.myGetProxy( 'ALAudioDevice' )
             ad.setOutputVolume( nVolPercent )
             return
-        except BaseException, err:
-            print( "getCurrentMasterVolume: error '%s'" % str( err ) )
+        except BaseException as err:
+            print(( "getCurrentMasterVolume: error '%s'" % str( err ) ))
         
     print( "WRN: => using old one using fork and shell!" )
         

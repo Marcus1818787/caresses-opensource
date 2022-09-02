@@ -1024,7 +1024,7 @@ typeMap = {
 }
 
 # Put in non-ambiguous types for faster codec lookup
-for typeDecoder in tagMap.values():
+for typeDecoder in list(tagMap.values()):
     if typeDecoder.protoComponent is not None:
         typeId = typeDecoder.protoComponent.__class__.typeId
         if typeId is not None and typeId not in typeMap:
@@ -1231,11 +1231,11 @@ class Decoder(object):
                         chosenSpec = None
                     if logger:
                         logger('candidate ASN.1 spec is a map of:')
-                        for firstOctet, v in asn1Spec.presentTypes.items():
+                        for firstOctet, v in list(asn1Spec.presentTypes.items()):
                             logger('  %s -> %s' % (firstOctet, v.__class__.__name__))
                         if asn1Spec.skipTypes:
                             logger('but neither of: ')
-                            for firstOctet, v in asn1Spec.skipTypes.items():
+                            for firstOctet, v in list(asn1Spec.skipTypes.items()):
                                 logger('  %s -> %s' % (firstOctet, v.__class__.__name__))
                         logger('new candidate ASN.1 spec is %s, chosen by %s' % (chosenSpec is None and '<none>' or chosenSpec.prettyPrintType(), tagSet))
                 elif tagSet == asn1Spec.tagSet or tagSet in asn1Spec.tagMap:

@@ -18,7 +18,7 @@ The classes implement a command pattern, with every
 object supporting an execute() method that does the
 actuall HTTP request.
 """
-from __future__ import absolute_import
+
 
 import sys
 sys.path.append("/data/home/nao/.local/share/PackageManager/apps/asr2/lib/otherlibs/")

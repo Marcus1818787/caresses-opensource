@@ -9,7 +9,7 @@ import timeit
 import unicodedata
 import functools
 
-from vad import VAD
+from .vad import VAD
 from abcdk.stk import runner
 
 from abcdk.sound import wav
@@ -18,7 +18,7 @@ import abcdk.python_speech_features.base as base
 from abcdk.leds import LedsDcm
 
 import threading
-import thread
+import _thread
 recordedFilesMutex = threading.Lock()
 ledsMutex = threading.Lock()
 
@@ -104,7 +104,7 @@ class SoundAnalyser:
         self.id_touch = self.touch.signal.connect(functools.partial(self.onTouch, "TouchChanged"))
         self.touched=False
         self.runningThread = True
-        thread.start_new_thread(self.asrOnFile,())
+        _thread.start_new_thread(self.asrOnFile,())
 
     def __del__( self ):
         self.stop()

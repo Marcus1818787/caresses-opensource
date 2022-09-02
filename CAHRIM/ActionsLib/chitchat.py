@@ -25,30 +25,30 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 import qi
 import argparse
 import sys
-from action import Action
+from .action import Action
 import os
 import json
-import caressestools.caressestools as caressestools
+from . import caressestools.caressestools as caressestools
 import string
 import glob
 import time
 from naoqi import ALProxy
-import thread
+import _thread
 import csv
 import re
 import signal
 import sys
 import random
 import functools
-from caressestools.multipage_choice_manager import MultiPageChoiceManager
-from caressestools.input_request_parser import InputRequestParser
+from .caressestools.multipage_choice_manager import MultiPageChoiceManager
+from .caressestools.input_request_parser import InputRequestParser
 import requests
-import urllib2
-import cookielib
+import urllib.request, urllib.error, urllib.parse
+import http.cookiejar
 import qi
 import time
 import threading
-import caressestools.speech as speech
+from . import caressestools.speech as speech
 from CahrimThreads.sensory_hub import DetectUserDepth
 import CahrimThreads.socket_handlers
 
@@ -366,7 +366,7 @@ class ChitChat(Action):
                 self.sASR.startReco(caressestools.Language.lang_naoqi, False, False)
                 self.state_rec=2
                 try:
-                    self.user_input=unicode(self.user_input,"utf-8")
+                    self.user_input=str(self.user_input,"utf-8")
                 except:
                     pass
                 
@@ -397,7 +397,7 @@ class ChitChat(Action):
                             thr.start()
                         result=self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["continue_cm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                         self.gothread = False
-                        result = [unicode(result[0], "utf-8"), result[1]]
+                        result = [str(result[0], "utf-8"), result[1]]
                         self.sp.userSaid(str(result))
                         if(result[0]=="EXIT"):
                             self.output_handler.writeSupplyMessage("publish", "D5.2", "userSays:[EXIT]")
@@ -489,7 +489,7 @@ class ChitChat(Action):
                             thr.start()
                         a=self.choice.giveChoiceMultiPage("", [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                         self.gothread = False
-                        a = [unicode(a[0], "utf-8"), a[1]]
+                        a = [str(a[0], "utf-8"), a[1]]
                         self.sp.userSaid(str(a))
                         self.ctopic=a[0]
                         if(a[0] is not "EXIT"):
@@ -510,7 +510,7 @@ class ChitChat(Action):
                         self.getInput(self.soundService)
                         self.state_rec=1
                         try:
-                            self.user_input=unicode(self.user_input,"utf-8")
+                            self.user_input=str(self.user_input,"utf-8")
                         except:
                             pass
 
@@ -531,7 +531,7 @@ class ChitChat(Action):
                                         thr.start()
                                     rr= self.choice.giveChoiceMultiPage(self.inputs["Chitchat"]["goodbye_confirm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                                     self.gothread = False
-                                    rr = [unicode(rr[0], "utf-8"), rr[1]]
+                                    rr = [str(rr[0], "utf-8"), rr[1]]
                                     self.sp.userSaid(str(rr))
                                     if(rr[0].lower()==self.inputs["AcceptRequest"]["yes"][self.language.lower()]):
                                         self.output_handler.writeSupplyMessage("publish", "D5.2", "userSays:[EXIT]")
@@ -568,7 +568,7 @@ class ChitChat(Action):
                                 thr.start()
                             rt= self.choice.giveChoiceMultiPage(self.inputs["Chitchat"]["action_confirm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                             self.gothread = False
-                            rt = [unicode(rt[0], "utf-8"), rt[1]]
+                            rt = [str(rt[0], "utf-8"), rt[1]]
                             self.sp.userSaid(str(rt))
                             
                             if(rt[0].lower()==self.inputs["AcceptRequest"]["yes"][self.language.lower()]):
@@ -604,7 +604,7 @@ class ChitChat(Action):
                                         thr.start()
                                     result=self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["freeze_cm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                                     self.gothread = False
-                                    result = [unicode(result[0], "utf-8"), result[1]]
+                                    result = [str(result[0], "utf-8"), result[1]]
                                     self.sp.userSaid(str(result))
                                     if(result[0]=="EXIT"):
                                         self.output_handler.writeSupplyMessage("publish", "D5.2", "userSays:[EXIT]")
@@ -650,7 +650,7 @@ class ChitChat(Action):
                                 thr.start()
                             a=self.choice.giveChoiceMultiPage("", [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False, timer=self.gt+60)
                             self.gothread = False
-                            a = [unicode(a[0], "utf-8"), a[1]]
+                            a = [str(a[0], "utf-8"), a[1]]
                             self.timing=0
                             self.sp.userSaid(str(a))
                             self.output_handler.writeSupplyMessage("publish", "D5.2", "userSays:["+a[0]+"]")
@@ -766,7 +766,7 @@ class ChitChat(Action):
 
             toret = CahrimThreads.socket_handlers.InputMsgHandler.getSmartphone() 
             CahrimThreads.socket_handlers.InputMsgHandler.resetSmartphone()
-            if toret is not None and toret.lower() in map(str.lower,options_str) and toret is not "":
+            if toret is not None and toret.lower() in list(map(str.lower,options_str)) and toret is not "":
                 self.sMemory.insertData("WordRecognized", ["<...> "+toret+" <...>", 1])
 
     ## Google Services may be used to retrieve the user's sentences
@@ -804,7 +804,7 @@ class ChitChat(Action):
                         thr.start()
                     result= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["continue_cm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                     self.gothread = False
-                    result = [unicode(result[0], "utf-8"), result[1]]
+                    result = [str(result[0], "utf-8"), result[1]]
                     self.user_input=str(result)
                     break
 
@@ -818,12 +818,12 @@ class ChitChat(Action):
                     start=time.time()
                     mem=input[0][0].decode('utf-8')
                     try:
-                        mem=unicode(mem,"utf-8")
+                        mem=str(mem,"utf-8")
                     except:
                         pass
 
                     try:
-                        print("INTERMEDIATE > " +mem)
+                        print(("INTERMEDIATE > " +mem))
                     except:
                         print("INFO: the user is talking")
 
@@ -839,7 +839,7 @@ class ChitChat(Action):
                                 thr.start()
                             rr= self.choice.giveChoiceMultiPage(self.inputs["Chitchat"]["goodbye_confirm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                             self.gothread = False
-                            rr = [unicode(rr[0], "utf-8"), rr[1]]
+                            rr = [str(rr[0], "utf-8"), rr[1]]
                             self.sp.userSaid(str(rr))
                             if(rr[0].lower()==self.inputs["AcceptRequest"]["yes"][self.language.lower()]):
                                 interruptwait=True
@@ -878,7 +878,7 @@ class ChitChat(Action):
                                 thr.start()
                             rr= self.choice.giveChoiceMultiPage(self.inputs["Chitchat"]["repeat_tablet"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                             self.gothread = False
-                            rr = [unicode(rr[0], "utf-8"), rr[1]]
+                            rr = [str(rr[0], "utf-8"), rr[1]]
                             self.sp.userSaid(str(rr))
                             if(rr[0].lower()==self.inputs["AcceptRequest"]["yes"][self.language.lower()]):
                                 interruptwait=True
@@ -914,7 +914,7 @@ class ChitChat(Action):
 
                             rr= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["revise_cm"][self.language.lower()], [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                             self.gothread = False
-                            rr = [unicode(rr[0], "utf-8"), rr[1]]
+                            rr = [str(rr[0], "utf-8"), rr[1]]
                             self.sp.userSaid(str(rr))
                             if(rr[0].lower()==self.inputs["AcceptRequest"]["yes"][self.language.lower()]):
                                 interruptwait=True
@@ -959,7 +959,7 @@ class ChitChat(Action):
                         thr.start()    
                     result= self.choice.giveChoiceMultiPage("", [self.inputs["Chitchat"]["over_and_out_only"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                     self.gothread = False
-                    result = [unicode(result[0], "utf-8"), result[1]]
+                    result = [str(result[0], "utf-8"), result[1]]
                     exit=True
                 if exit==True:
                     break
@@ -1005,7 +1005,7 @@ class ChitChat(Action):
                         thr.start()
                     result= self.choice.giveChoiceMultiPage("", [self.inputs["AcceptRequest"]["yes"][self.language.lower()], self.inputs["AcceptRequest"]["no"][self.language.lower()]], confidence=0.50, bSayQuestion=False)
                     self.gothread = False
-                    result = [unicode(result[0], "utf-8"), result[1]]
+                    result = [str(result[0], "utf-8"), result[1]]
                     self.user_input=str(result)
                     break
 
@@ -1017,7 +1017,7 @@ class ChitChat(Action):
             elif not input == None and not input == []:
                 self.user_input=input[0][0].decode('utf-8')
         try:
-            self.user_input=unicode(self.user_input,"utf-8")
+            self.user_input=str(self.user_input,"utf-8")
         except:
             pass
 
@@ -1034,7 +1034,7 @@ class ChitChat(Action):
             else:
                 self.user_input=self.user_input+" "+self.inputs["Chitchat"]["over_and_out_only"][self.language.lower()]
             try:
-                result = [unicode(result[0], "utf-8"), result[1]]
+                result = [str(result[0], "utf-8"), result[1]]
             except:
                 pass
             self.sp.userSaid(str(result))
@@ -1069,7 +1069,7 @@ class ChitChat(Action):
 
     # The method checks if the user had the intention of performing an action
     def checkActions(self):
-        for entry in self.inputDict.keys():
+        for entry in list(self.inputDict.keys()):
             if "action" in entry:
                 for req_par_1 in self.inputDict[entry]["request_parameters_1"]:
                     if req_par_1.lower() in " " + self.user_input.lower()+" *":
@@ -1151,10 +1151,10 @@ class ChitChat(Action):
     def getInputFromChoiceManagerObjects(self, tabletview):
         display=[]
         for i in range(0, len(self.CMoptions["IDs"])):
-            if (self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[i]]["tablet-view"])==tabletview:
+            if (self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[i]]["tablet-view"])==tabletview:
                 a=i
-                for j in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"])):
-                    display.append(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"][j])
+                for j in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"])):
+                    display.append(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"][j])
 
         if self.sp._input==2:
             self.gothread = True
@@ -1162,11 +1162,11 @@ class ChitChat(Action):
             thr.start()
         self.result2= self.choice.giveChoiceMultiPage(self.inputs["AcceptRequest"]["cm_q2"][self.language.lower()], display, confidence=0.50, bSayQuestion=False)
         self.gothread = False
-        self.result2 = [unicode(self.result2[0], "utf-8"), self.result2[1]]
+        self.result2 = [str(self.result2[0], "utf-8"), self.result2[1]]
         self.sp.userSaid(str(self.result2))
-        for i in range (0, len(self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"])):
-            if(self.result2[0]==self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["full"][i]):
-                self.tobese=self.CMoptions["IDs"][self.CMoptions["IDs"].keys()[a]]["options"]["IDs"][i]
+        for i in range (0, len(self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"])):
+            if(self.result2[0]==self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["full"][i]):
+                self.tobese=self.CMoptions["IDs"][list(self.CMoptions["IDs"].keys())[a]]["options"]["IDs"][i]
                 break
             else:
                 self.tobese="EXIT"
@@ -1237,7 +1237,7 @@ if __name__ == "__main__":
 
     caressestools.Settings.robotIP = args.ip
 
-    print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+    print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
     cpar = "1.0 100 1.0 English Sonali"
     apar = "The_Diwali_Festival 1"
     action = ChitChat(apar, cpar, session, None)

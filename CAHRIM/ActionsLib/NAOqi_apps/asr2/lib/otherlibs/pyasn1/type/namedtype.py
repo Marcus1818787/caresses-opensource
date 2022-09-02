@@ -17,7 +17,7 @@ try:
     any
 
 except NameError:
-    any = lambda x: bool(filter(bool, x))
+    any = lambda x: bool(list(filter(bool, x)))
 
 
 class NamedType(object):

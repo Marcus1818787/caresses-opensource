@@ -70,11 +70,11 @@ class ObjectTracking(object):
             while(True):
                 result = self.videoDevice.getImageRemote(self.captureDevice);
                 if result == None:
-                    print 'cannot capture.'
+                    print('cannot capture.')
                 elif result[6] == None:
-                    print 'no image data string.'
+                    print('no image data string.')
                 else:
-                    values = map(ord, list(result[6]))
+                    values = list(map(ord, list(result[6])))
                     i = 0
                     for y in range(0, self.height):
                         for x in range(0, self.width):
@@ -135,7 +135,7 @@ class ObjectTracking(object):
                 # key = cv2.waitKey(1) & 0xFF
 
         except KeyboardInterrupt:
-            print "Interrupted by user"
+            print("Interrupted by user")
             self.videoDevice.unsubscribe(self.captureDevice);
 
     def Rotate(self,speed):
@@ -175,13 +175,13 @@ if __name__ == "__main__":
     try:
         session.connect("tcp://" + args.ip + ":" + str(args.port))
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
-               "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
+               "Please check your script arguments. Run with -h option for help."))
 
     apar = "RefImage_1.png" + " 8" 
     cpar = "600" + " 0.2"
 
     action = ObjectTracking(apar,cpar,session,args.ip)
     result = action.ObjTracking()
-    print "result: %s" %result
+    print("result: %s" %result)
     action.stop()

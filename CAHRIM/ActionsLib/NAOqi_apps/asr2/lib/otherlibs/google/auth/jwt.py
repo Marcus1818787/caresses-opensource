@@ -227,7 +227,7 @@ def decode(token, certs=None, verify=True, audience=None):
             certs_to_check = [certs[key_id]]
         # If there's no key id in the header, check against all of the certs.
         else:
-            certs_to_check = certs.values()
+            certs_to_check = list(certs.values())
     else:
         certs_to_check = certs
 

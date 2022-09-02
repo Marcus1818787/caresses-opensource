@@ -1,3 +1,0 @@
-- Create database : create-db.py
-- Print database info : db-info.py
-- Delete all rows : delete-rows.py

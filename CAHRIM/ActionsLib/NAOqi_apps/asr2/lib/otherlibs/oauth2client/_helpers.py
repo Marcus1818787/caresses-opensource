@@ -23,7 +23,7 @@ import os
 import warnings
 
 import six
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 logger = logging.getLogger(__name__)

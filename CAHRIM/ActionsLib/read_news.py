@@ -25,10 +25,10 @@ Project:     CARESSES (http://caressesrobot.org/en/)
 import time
 import functools
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
-from aux_files.read_news_lib import cleanText, getArticle, obtainHeadsAndLinks
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
+from .aux_files.read_news_lib import cleanText, getArticle, obtainHeadsAndLinks
 
 
 ## Action "Read News".
@@ -128,7 +128,7 @@ class ReadNews(Action):
             if self.is_stopped:
                 break
             try:
-                self.sp.monolog(self.speech_source, "0", param={"$ART_NUMBER$": str(headline_index + 1), "$ART_HEAD$": unicode(headline,"utf-8")}, tag=speech.TAGS[1])
+                self.sp.monolog(self.speech_source, "0", param={"$ART_NUMBER$": str(headline_index + 1), "$ART_HEAD$": str(headline,"utf-8")}, tag=speech.TAGS[1])
             except:
                 self.sp.monolog(self.speech_source, "0", param={"$ART_NUMBER$": str(headline_index + 1), "$ART_HEAD$": headline}, tag=speech.TAGS[1])
             article_is_chosen = self.sp.askYesOrNoQuestion(line_read_article, speech.TAGS[4], noisy=self.asr)
@@ -186,7 +186,7 @@ class ReadNews(Action):
 
                         self.sp.enableAnimatedSpeech(False)
                         try:
-                            self.sp.say(unicode(period, 'utf-8'), speech.TAGS[1])
+                            self.sp.say(str(period, 'utf-8'), speech.TAGS[1])
                         except:
                             self.sp.say(period, speech.TAGS[1])
                         self.sp.enableAnimatedSpeech(True)
@@ -239,11 +239,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -258,4 +258,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

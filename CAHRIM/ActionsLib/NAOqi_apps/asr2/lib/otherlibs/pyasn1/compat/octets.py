@@ -22,7 +22,7 @@ if version_info[0] <= 2:
     # noinspection PyPep8
     isOctetsType = lambda s: isinstance(s, str)
     # noinspection PyPep8
-    isStringType = lambda s: isinstance(s, (str, unicode))
+    isStringType = lambda s: isinstance(s, str)
     # noinspection PyPep8
     ensureString = str
 else:

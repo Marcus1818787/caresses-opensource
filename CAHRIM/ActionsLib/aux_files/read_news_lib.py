@@ -23,7 +23,7 @@ Affiliation: (1) Laboratorium, DIBRIS, University of Genova, Italy
 Project:     CARESSES (http://caressesrobot.org/en/)
 '''
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import argparse
 import feedparser
 import re
@@ -75,8 +75,8 @@ def getArticle(source, url):
     user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
     headers = {'User-Agent': user_agent}
 
-    req = urllib2.Request(url, headers=headers)
-    f = urllib2.urlopen(req)
+    req = urllib.request.Request(url, headers=headers)
+    f = urllib.request.urlopen(req)
 
     intro = []
     paragraphs = []
@@ -230,14 +230,14 @@ class ReadNewsTester():
         
         print("\n\n")
         print("====================================================")
-        print(" Channel: %s") % self.source_full 
-        print(" Article: %s") % self.heads[index]
-        print(" Link:    %s") % self.complete_url
+        print((" Channel: %s") % self.source_full) 
+        print((" Article: %s") % self.heads[index])
+        print((" Link:    %s") % self.complete_url)
         print("====================================================")
         
         if article_body is not None:
             for period_index, period in enumerate(article_body):
-                print(period.encode('utf-8'))
+                print((period.encode('utf-8')))
 
 if __name__ == '__main__':
 
@@ -245,5 +245,5 @@ if __name__ == '__main__':
     parser.add_argument("--index", "-i", type=int, default=0, help="Index of the news article.")
 
     args = parser.parse_args()
-    for channel in urls.keys():
+    for channel in list(urls.keys()):
         ReadNewsTester(channel).test(args.index)

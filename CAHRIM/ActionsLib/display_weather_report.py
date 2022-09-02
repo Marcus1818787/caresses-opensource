@@ -30,9 +30,9 @@ import functools
 from threading import Timer
 from google.cloud import translate
 
-from action import Action
-import caressestools.caressestools as caressestools
-import caressestools.speech as speech
+from .action import Action
+from . import caressestools.caressestools as caressestools
+from . import caressestools.speech as speech
 
 WEATHER_REPORT_ROBOT = "caresses-weather-report"
 ASR_SERVICE = "Caresses_DisplayWeatherReport_ASR"
@@ -133,16 +133,16 @@ class DisplayWeatherReport(Action):
             self.location_full = custom_option
 
             try:
-                self.location_full_unicode=unicode(self.location_full,"utf-8")
+                self.location_full_unicode=str(self.location_full,"utf-8")
             except:
                 self.location_full_unicode=self.location_full
 
-            while self.location_full_unicode == unicode(custom_option,"utf-8"):
+            while self.location_full_unicode == str(custom_option,"utf-8"):
 
                 self.location_full = self.sp.dialog(self.__class__.__name__, self.locations_options, checkValidity=False, askForConfirmation=True, noisy=self.asr)
 
                 try:
-                    self.location_full_unicode=unicode(self.location_full,"utf-8")
+                    self.location_full_unicode=str(self.location_full,"utf-8")
                 except:
                     self.location_full_unicode=self.location_full
         else:
@@ -315,11 +315,11 @@ if __name__ == "__main__":
         # Initialize qi framework.
         session = qi.Session()
         session.connect("tcp://" + args.ip + ":" + str(args.port))
-        print("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n")
+        print(("\nConnected to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"))
 
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
-                                                                                              "Please check your script arguments. Run with -h option for help.")
+        print(("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) + ".\n"
+                                                                                              "Please check your script arguments. Run with -h option for help."))
         sys.exit(1)
 
     caressestools.Settings.robotIP = args.ip
@@ -334,4 +334,4 @@ if __name__ == "__main__":
     try:
         action.run()
     except speech.StopInteraction as e:
-        print e
+        print(e)

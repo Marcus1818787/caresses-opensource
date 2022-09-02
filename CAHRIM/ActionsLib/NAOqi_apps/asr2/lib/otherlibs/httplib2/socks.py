@@ -369,7 +369,7 @@ class socksocket(socket.socket):
         wrote_host_header = False
         wrote_auth_header = False
         if self.__proxy[6] != None:
-            for key, val in self.__proxy[6].iteritems():
+            for key, val in self.__proxy[6].items():
                 headers += [key, ": ", val, "\r\n"]
                 wrote_host_header = (key.lower() == "host")
                 wrote_auth_header = (key.lower() == "proxy-authorization")
@@ -409,7 +409,7 @@ class socksocket(socket.socket):
         To select the proxy server use setproxy().
         """
         # Do a minimal input check first
-        if (not type(destpair) in (list,tuple)) or (len(destpair) < 2) or (not isinstance(destpair[0], basestring)) or (type(destpair[1]) != int):
+        if (not type(destpair) in (list,tuple)) or (len(destpair) < 2) or (not isinstance(destpair[0], str)) or (type(destpair[1]) != int):
             raise GeneralProxyError((5, _generalerrors[5]))
         if self.__proxy[0] == PROXY_TYPE_SOCKS5:
             if self.__proxy[2] != None:
